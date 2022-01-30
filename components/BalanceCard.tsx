@@ -32,12 +32,27 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
         <p className="text-slate-700 text-xl font-semibold">
           Signed off by: {transaction.signedOff}
         </p>
-        <p className="text-slate-700 text-xl font-normal">
-          Society: {transaction.society}
-        </p>
-        <p className="text-gray-700 text-md font-medium">
-          {transaction.description}
-        </p>
+        <div className="flex flex-row items-center justify-between">
+          <div>
+            <p className="text-slate-700 text-xl font-normal">
+              Society: {transaction.society}
+            </p>
+            <p className="text-gray-700 text-md font-medium">
+              {transaction.description}
+            </p>
+          </div>
+          <div className="flex flex-row">
+            <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded m-2">
+              ✏️
+            </button>{" "}
+            {/* <button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2"
+              // onClick={deleteStatus}
+            >
+              ❌
+            </button> */}
+          </div>
+        </div>
       </div>
     </>
   );

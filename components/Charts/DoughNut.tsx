@@ -1,27 +1,89 @@
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { Transaction } from "../../types";
 
 interface Props {
   label: string[];
+  transactions: Transaction[];
 }
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function PieChart({ label }: Props) {
+export default function PieChart({ label, transactions }: Props) {
+  const mainTransactions = transactions.filter(
+    (transaction) =>
+      transaction.society === "main" && transaction.type !== "open"
+  );
+
+  const computerSocietyTransactions = transactions.filter(
+    (transaction) => transaction.society === "Computer Society"
+  );
+  const communicationSocietyTransactions = transactions.filter(
+    (transaction) => transaction.society === "Communication Society"
+  );
+  const spsTransactions = transactions.filter(
+    (transaction) => transaction.society === "SPS"
+  );
+  const apsTransactions = transactions.filter(
+    (transaction) => transaction.society === "APS"
+  );
+  const sightTransactions = transactions.filter(
+    (transaction) => transaction.society === "Sight"
+  );
+  const wieTransactions = transactions.filter(
+    (transaction) => transaction.society === "WIE"
+  );
+  const rasTransactions = transactions.filter(
+    (transaction) => transaction.society === "RAS"
+  );
+
+  const mainTotal = mainTransactions.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+
+  const computerSocietyTotal = computerSocietyTransactions.reduce(
+    (acc, curr) => {
+      return acc + curr.amount;
+    },
+    0
+  );
+
+  const communicationSocietyTotal = communicationSocietyTransactions.reduce(
+    (acc, curr) => {
+      return acc + curr.amount;
+    },
+    0
+  );
+  const spsTotal = spsTransactions.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+  const apsTotal = apsTransactions.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+  const sightTotal = sightTransactions.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+  const wieTotal = wieTransactions.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+  const rasTotal = rasTransactions.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+
   const data = {
     labels: label,
     datasets: [
       {
         data: [
-          "6000",
-          "18000",
-          "8000",
-          "7000",
-          "4000",
-          "15000",
-          "6000",
-          "6000",
+          mainTotal,
+          computerSocietyTotal,
+          communicationSocietyTotal,
+          spsTotal,
+          apsTotal,
+          sightTotal,
+          wieTotal,
+          rasTotal,
         ],
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",

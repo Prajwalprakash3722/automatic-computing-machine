@@ -52,7 +52,7 @@ const InfoGraphics = ({ modal, setModalOpen, transactions }: Props) => {
       </div>
       {modal && (
         <div className="bg-gray-50 p-5 m-2">
-          <DoughNut label={soc} />
+          <DoughNut label={soc} transactions={transactions} />
         </div>
       )}
     </>
