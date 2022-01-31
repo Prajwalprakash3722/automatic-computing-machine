@@ -6,20 +6,23 @@ import BalCard from "../components/HeaderCard";
 import { Transaction } from "../types";
 import { useState } from "react";
 import InfoGraphics from "../components/InfoGraphics";
+import Prisma from "../lib/prisma";
 
-const Home: NextPage = () => {
-  const [transactions, setTransactions] = useState([
-    {
-      id: "1",
-      amount: 625996.42,
-      date: "2022-01-01",
-      description: "Opening Balance as of January 2022",
-      event: "Opening Balance",
-      signedOff: "Shashank Dhavala",
-      type: "open",
-      society: "main",
+export async function getServerSideProps() {
+  const transactions = await Prisma.transaction.findMany();
+  return {
+    props: {
+      transaction: transactions,
     },
-  ]);
+  };
+}
+
+interface Props {
+  transaction: Transaction[];
+}
+
+export default function Index({ transaction }: Props) {
+  const [transactions, setTransactions] = useState<Transaction[]>(transaction);
 
   const [modal, setModalOpen] = useState(false);
   const [infographics, setInfographics] = useState(false);
@@ -31,7 +34,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/icons/android-chrome-512x512.png" />
       </Head>
       <BalCard
-        openBalance={transactions[0].amount}
+        openBalance={transactions[0] ? transactions[0].amount : 0}
         transactions={transactions}
       />
 
@@ -56,6 +59,4 @@ const Home: NextPage = () => {
       <BalanceList transactions={transactions} />
     </div>
   );
-};
-
-export default Home;
+}

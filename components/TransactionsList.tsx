@@ -25,17 +25,14 @@ const TransactionsList = ({ transactions }: Props) => {
             </button>
           </div>
           <div>
-            {/* <button className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer">
-              Generate Report
-            </button>
-            <button className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer">
-              Generate Report
-            </button> */}
+            {/*
+           TODO : Add Filtering Feature
+           */}
           </div>
         </div>
         <div>
-          {transactions.map((transaction) => (
-            <BalCard key={transaction.id} transaction={transaction} />
+          {transactions.map((transaction, index) => (
+            <BalCard key={index} transaction={transaction} />
           ))}
         </div>
       </div>

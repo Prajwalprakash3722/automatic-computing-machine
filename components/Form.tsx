@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Transaction } from "../types";
 
@@ -20,24 +21,33 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
   ];
 
   const [data, setData] = useState<Transaction>({
-    id: "asd",
     event: "",
-    amount: 0,
     date: "",
-    society: "",
+    amount: 0,
+    type: "debit",
     description: "",
     signedOff: "",
-    type: "debit",
+    society: "",
   });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setTransactions([...transactions, data]), setModal(false);
+    const res = await axios.post(
+      "http://localhost:3000/api/transaction/add",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+  };
 
   return (
     <>
       <div className="flex flex-col gap-4 m-2 md:w-1/3">
-        <form
-          onSubmit={() => {
-            setTransactions([...transactions, data]), setModal(false);
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <input
             className="focus:outline-none w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
             type="text"

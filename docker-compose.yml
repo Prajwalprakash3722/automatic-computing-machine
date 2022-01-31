@@ -1,0 +1,18 @@
+services:
+  pgdb:
+    container_name: accounts_database
+    image: postgres:13
+    hostname: pgdb
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=Transcations
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - PGPASSWORD
+volumes:
+  pgdata:
