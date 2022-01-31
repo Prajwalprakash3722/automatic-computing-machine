@@ -9,7 +9,7 @@ interface Props {
 
 const Form = ({ transactions, setTransactions, setModal }: Props) => {
   const soc = [
-    "main",
+    "Main",
     "Computer Society",
     "Communication Society",
     "SPS",

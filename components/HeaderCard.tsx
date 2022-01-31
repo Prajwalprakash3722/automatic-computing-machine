@@ -1,4 +1,3 @@
-import type { NextComponentType, GetServerSideProps } from "next";
 import { Transaction } from "../types";
 
 interface Props {

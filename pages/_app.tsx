@@ -1,7 +1,8 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
-function MyApp({ Component, pageProps }: AppProps) {
+// import AuthRoute from "../components/AuthRoute";
+function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <Layout>
       <Component {...pageProps} />

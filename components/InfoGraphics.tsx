@@ -9,7 +9,7 @@ interface Props {
 
 const InfoGraphics = ({ modal, setModalOpen, transactions }: Props) => {
   const soc = [
-    "main",
+    "Main",
     "Computer Society",
     "Communication Society",
     "SPS",

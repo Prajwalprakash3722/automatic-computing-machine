@@ -8,3 +8,8 @@ export type Transaction = {
   signedOff: string;
   society: string;
 };
+
+export type User = {
+  ieeeid: string;
+  password: string;
+}

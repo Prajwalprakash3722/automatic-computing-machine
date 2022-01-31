@@ -116,6 +116,12 @@ export default function PieChart({ label, transactions }: Props) {
       options={{
         responsive: true,
         maintainAspectRatio: true,
+        plugins: {
+          title: {
+            display: true,
+            text: "Amount Spent By Societies",
+          },
+        },
       }}
       height={400}
       width={400}

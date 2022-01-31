@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
-// import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { API_URL } from "../Misc/api";
 
 /**
  *
@@ -27,16 +28,33 @@ export default function Header() {
     () => router.pathname.split("/")[1]
   );
   const [logged, setLoggedIn] = useState(false);
-  const handleLogout = () => {
-    localStorage.removeItem("token");
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("token") &&
+      localStorage.getItem("isAuthenticated") === "true"
+    ) {
+      setLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    const res = await axios.delete(API_URL + "/api/auth", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+    console.log(res);
     setLoggedIn(false);
-    router.push("/");
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("token");
+    router.push("/login");
   };
   const listItems = [
     {
       name: "Home",
       path: "/",
-      auth: false,
+      auth: true,
     },
   ];
 
@@ -89,14 +107,6 @@ export default function Header() {
                   ))}
                 </div>
                 <div className="hidden md:flex items-center space-x-3 ">
-                  <Link href="/profile" passHref>
-                    <a className="p-3 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300">
-                      {/* {user?.name ?? (
-                        <div style={{ color: "red" }}>Warning, logged out!</div>
-                      )} */}
-                      Profile
-                    </a>
-                  </Link>
                   <button
                     onClick={handleLogout}
                     className="p-3 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"

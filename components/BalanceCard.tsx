@@ -6,7 +6,6 @@ type BalanceCardProps = {
 };
 const BalCard = ({ transaction }: BalanceCardProps) => {
   /**
-   *
    * @param num
    * @returns Neatly Formatted Indian Rupee
    */
@@ -23,7 +22,7 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
             : "bg-green-100 border-green-500"
         } p-6 rounded-lg shadow-lg  border-2 mt-4`}
       >
-        <h2 className="text-2xl font-bold mb-2 text-gray-800 first-letter:capitalize">
+        <h2 className="text-2xl font-bold text-gray-800 first-letter:capitalize">
           {transaction.event}
           {" on "}
           <span className="text-indigo-400">{transaction.date}</span>
@@ -39,7 +38,7 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
         </p>
         <div className="flex flex-row items-center justify-between">
           <div>
-            <p className="text-slate-700 text-xl font-normal">
+            <p className="text-slate-700 text-xl font-normal underline">
               Society: {transaction.society}
             </p>
             <p className="text-gray-700 text-md font-medium">

@@ -12,7 +12,7 @@ const Home: NextPage = () => {
     {
       id: "1",
       amount: 625996.42,
-      date: new Date().toLocaleDateString(),
+      date: "2022-01-01",
       description: "Opening Balance as of January 2022",
       event: "Opening Balance",
       signedOff: "Shashank Dhavala",
