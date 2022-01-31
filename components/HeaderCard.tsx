@@ -33,7 +33,7 @@ const HeaderCards = ({ openBalance, transactions }: Props) => {
           </h2>
         </div>
         <div className="flex flex-col bg-blue-100 p-4 justify-evenly gap-4 md:flex-row lg:p-12">
-          <div className="w-full bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3">
+          <div className="w-full bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3 border-2 border-indigo-400">
             <h2 className="text-2xl font-bold mb-2 text-gray-800">
               Opening Balance for{" "}
               <span className="text-indigo-400">
@@ -62,7 +62,7 @@ const HeaderCards = ({ openBalance, transactions }: Props) => {
               &#8377;{parseRupees(lastTransaction.amount)}
             </p>
           </div>
-          <div className="w-full bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3">
+          <div className="w-full bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3 border-2 border-indigo-400">
             <h2 className="text-2xl font-bold mb-2 text-gray-800">
               Current Balance as of{" "}
               <span className="text-indigo-400">
@@ -71,6 +71,17 @@ const HeaderCards = ({ openBalance, transactions }: Props) => {
             </h2>
             <p className="text-gray-700 text-2xl font-semibold">
               &#8377;{parseRupees(balance)}
+            </p>
+          </div>
+          <div className="w-full bg-white p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3 border-2 border-indigo-400">
+            <h2 className="text-2xl font-bold mb-2 text-gray-800">
+              Amount Spent till{" "}
+              <span className="text-indigo-400">
+                {new Date().toLocaleDateString()}
+              </span>
+            </h2>
+            <p className="text-gray-700 text-2xl font-semibold">
+              &#8377;{parseRupees(openBalance - balance)}
             </p>
           </div>
         </div>
