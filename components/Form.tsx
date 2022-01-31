@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Transaction } from "../types";
+import ErrorAlert from "./Alerts/ErrorAlert";
 
 interface Props {
   transactions: Transaction[];
@@ -32,16 +33,20 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setTransactions([...transactions, data]), setModal(false);
-    const res = await axios.post(
-      "http://localhost:3000/api/transaction/add",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/transaction/add",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    } catch (err) {
+      <ErrorAlert message="Something went wrong, please try again" />;
+    }
   };
 
   return (

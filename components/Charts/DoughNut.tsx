@@ -13,7 +13,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export default function PieChart({ label, transactions }: Props) {
   const mainTransactions = transactions.filter(
     (transaction) =>
-      transaction.society === "main" && transaction.type !== "open"
+      transaction.society === "Main" && transaction.type !== "open"
   );
 
   const computerSocietyTransactions = transactions.filter(
