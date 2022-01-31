@@ -10,7 +10,11 @@ interface Props {
 }
 
 
-
+/**
+ * 
+ * @param transactions
+ * @returns {jsPDF}
+ */
 const generatePDF = ({ transactions }: Props) => {
 
   const debitTranscations = transactions.filter(

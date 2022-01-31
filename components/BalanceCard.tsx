@@ -5,6 +5,11 @@ type BalanceCardProps = {
   transaction: Transaction;
 };
 const BalCard = ({ transaction }: BalanceCardProps) => {
+  /**
+   *
+   * @param num
+   * @returns Neatly Formatted Indian Rupee
+   */
   const parseRupees = (num: number) => {
     return new Intl.NumberFormat("en-IN").format(num);
   };
