@@ -30,7 +30,6 @@ const Login: NextPage = () => {
         window.location.replace(window.location.origin);
       }
     } catch (err) {
-      console.log(err);
       setError(true);
       setErrorMessage("Some Thing Went Wrong, Please Try Again Later");
     }
@@ -51,8 +50,8 @@ const Login: NextPage = () => {
                 <input
                   className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-500 bg-white border rounded-md   focus:border-blue-400  focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
                   type="text"
-                  placeholder="Email Address"
-                  aria-label="Email Address"
+                  placeholder="IEEE ID"
+                  aria-label="IEEE ID"
                   onChange={(e) => setUser({ ...user, ieeeid: e.target.value })}
                 />
               </div>

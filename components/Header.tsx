@@ -44,7 +44,6 @@ export default function Header() {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     });
-    console.log(res);
     setLoggedIn(false);
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("token");
