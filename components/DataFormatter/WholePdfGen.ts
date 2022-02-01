@@ -1,4 +1,4 @@
-import { Transaction } from '../../types/index';
+import type { Transaction } from '../../types/index';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { parseISO } from "date-fns";

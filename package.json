@@ -8,6 +8,9 @@
     "lint": "next lint",
     "migrate": "npx prisma migrate dev"
   },
+  "prettier":{
+    "semi": true
+  },
   "dependencies": {
     "@prisma/client": "^3.8.1",
     "@types/file-saver": "^2.0.5",
