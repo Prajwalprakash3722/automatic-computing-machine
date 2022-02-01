@@ -1,6 +1,7 @@
-import { Transaction } from "../types";
+import type { Transaction } from "../types";
 import BalCard from "./BalanceCard";
 import generatePDF from "./DataFormatter/WholePdfGen";
+import generateExcelSheet from "./DataFormatter/WholeXcelGen";
 
 interface Props {
   transactions: Transaction[];
@@ -20,7 +21,9 @@ const TransactionsList = ({ transactions }: Props) => {
             >
               Generate Report (PDF)
             </button>
-            <button className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer">
+            <button onClick={() => {
+                generateExcelSheet( transactions );
+              }} className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer">
               Generate Report (Excel)
             </button>
           </div>
