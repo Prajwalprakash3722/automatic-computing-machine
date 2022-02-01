@@ -163,7 +163,7 @@ export default function Edit({ transaction }: Props) {
             type="submit"
             className="w-full justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-800 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            Add
+            Update
           </button>
         </form>
       </div>

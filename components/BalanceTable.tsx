@@ -3,7 +3,8 @@ import { useMemo } from "react";
 import { ColumnFilter } from "../Misc/ColFilter";
 import { Transaction } from "../types";
 import { useTable, usePagination, useFilters } from "react-table";
-
+import { PencilIcon } from "@heroicons/react/solid";
+import { TrashIcon } from "@heroicons/react/solid";
 type BalanceCardProps = {
   transaction: Transaction[];
 };
@@ -138,7 +139,7 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} key={i}>
+              <tr {...row.getRowProps()} key={row.original.id}>
                 {row.cells.map((cell) => {
                   return (
                     <td
@@ -161,12 +162,16 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-evenly">
                     <Link href="/edit/[id]" as={`/edit/${row.original.id}`}>
-                      <a className="mr-2 text-green-500 md:m-0">Edit</a>
+                      <a className="mr-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                        <PencilIcon className="h-6 w-6" />
+                      </a>
                     </Link>
                     <Link href="/edit/[id]" as={`/delete/${row.original.id}`}>
-                      <a className="text-red-500">Delete</a>
+                      <a className="mr-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                        <TrashIcon className="h-6 w-6" />
+                      </a>
                     </Link>
                   </div>
                 </td>
