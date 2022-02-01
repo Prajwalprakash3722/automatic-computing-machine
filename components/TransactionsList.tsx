@@ -1,5 +1,5 @@
 import type { Transaction } from "../types";
-import BalCard from "./BalanceCard";
+import BalanceTable from "./BalanceTable";
 import generatePDF from "./DataFormatter/WholePdfGen";
 import generateExcelSheet from "./DataFormatter/WholeXcelGen";
 
@@ -15,15 +15,18 @@ const TransactionsList = ({ transactions }: Props) => {
           <div className="flex flex-row">
             <button
               onClick={() => {
-                generatePDF( transactions );
+                generatePDF(transactions);
               }}
               className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer"
             >
               Generate Report (PDF)
             </button>
-            <button onClick={() => {
-                generateExcelSheet( transactions );
-              }} className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer">
+            <button
+              onClick={() => {
+                generateExcelSheet(transactions);
+              }}
+              className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer"
+            >
               Generate Report (Excel)
             </button>
           </div>
@@ -34,9 +37,7 @@ const TransactionsList = ({ transactions }: Props) => {
           </div>
         </div>
         <div>
-          {transactions.map((transaction, index) => (
-            <BalCard key={index} transaction={transaction} />
-          ))}
+          <BalanceTable transaction={transactions} />
         </div>
       </div>
     </div>
