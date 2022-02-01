@@ -34,7 +34,7 @@ export default function Index({ transaction }: Props) {
         <link rel="icon" href="/icons/android-chrome-512x512.png" />
       </Head>
       <BalCard
-        openBalance={transactions[0] ? transactions[0].amount : 0}
+        openBalance={transactions[0]?.amount ?? 0}
         transactions={transactions}
       />
 

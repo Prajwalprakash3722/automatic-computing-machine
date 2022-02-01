@@ -1,21 +1,14 @@
-import { Transaction } from './../../types/index';
+import { Transaction } from '../../types/index';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { parseISO } from "date-fns";
 import { format } from "date-fns";
 
-
-interface Props {
-  transactions: Transaction[];
-}
-
-
 /**
- * 
+ * Generate a PDF
  * @param transactions
- * @returns {jsPDF}
  */
-const generatePDF = ({ transactions }: Props) => {
+const generatePDF = ( transactions : Transaction[]) => {
 
   const debitTranscations = transactions.filter(
     (transaction) => transaction.type === "debit"
