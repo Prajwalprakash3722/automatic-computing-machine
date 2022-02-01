@@ -39,6 +39,7 @@ const generatePDF = ({ transactions }: Props) => {
     "Id",
     "Date",
     "society",
+    "Event",
     "Amount",
     "Type",
     "Balance",
@@ -56,13 +57,14 @@ const generatePDF = ({ transactions }: Props) => {
       data.id,
       data.date,
       data.society,
+      data.event,
       parseRupees(data.amount),
       data.type,
       parseRupees(balance),
     ];
     return tableRows.push(ticketData);
   });
-  const lastRow = ["Total Balance", "", "", "", "", parseRupees(Balance)];
+  const lastRow = ["Total Balance", "", "", "", "", "", parseRupees(Balance)];
   tableRows.push(lastRow);
 
   autoTable(doc, {

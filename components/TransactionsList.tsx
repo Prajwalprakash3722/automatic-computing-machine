@@ -1,5 +1,5 @@
 import { Transaction } from "../types";
-import BalCard from "./BalanceCard";
+import BalanceTable from "./BalanceTable";
 import generatePDF from "./PdfGen/WholePdfGen";
 
 interface Props {
@@ -31,9 +31,7 @@ const TransactionsList = ({ transactions }: Props) => {
           </div>
         </div>
         <div>
-          {transactions.map((transaction, index) => (
-            <BalCard key={index} transaction={transaction} />
-          ))}
+          <BalanceTable transaction={transactions} />
         </div>
       </div>
     </div>
