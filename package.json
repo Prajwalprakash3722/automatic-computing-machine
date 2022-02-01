@@ -8,12 +8,18 @@
     "lint": "next lint",
     "migrate": "npx prisma migrate dev"
   },
+  "prettier":{
+    "semi": true
+  },
   "dependencies": {
     "@prisma/client": "^3.8.1",
+    "@types/file-saver": "^2.0.5",
     "@types/jsonwebtoken": "^8.5.8",
     "axios": "^0.25.0",
     "chart.js": "^3.7.0",
     "date-fns": "^2.28.0",
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.23",
