@@ -81,7 +81,10 @@ const HeaderCards = ({ openBalance, transactions }: Props) => {
               </span>
             </h2>
             <p className="text-gray-700 text-2xl font-semibold">
-              &#8377;{parseRupees(openBalance - balance)}
+              &#8377;{" "}
+              {parseRupees(
+                openBalance - balance < 0 ? 0 : openBalance - balance
+              )}
             </p>
           </div>
         </div>

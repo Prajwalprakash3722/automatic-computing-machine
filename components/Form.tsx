@@ -2,6 +2,7 @@ import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Transaction } from "../types";
 import ErrorAlert from "./Alerts/ErrorAlert";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
   transactions: Transaction[];
@@ -31,28 +32,45 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
     society: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setTransactions([...transactions, data]), setModal(false);
+  const create = async (data: Transaction) => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/transaction/add",
-        data,
+      await axios.post("http://localhost:3000/api/transaction/add", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  };
+  const handleSubmit = async (data: Transaction) => {
+    try {
+      toast.promise(
+        create(data),
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          loading: "Working on it...",
+          success: "Transaction Added successfully!",
+          error: "Oops! something went wrong.",
+        },
+        {
+          duration: 3000,
         }
       );
-    } catch (err) {
-      <ErrorAlert message="Something went wrong, please try again" />;
+    } catch (error) {
+      toast.error(error as any);
     }
   };
 
   return (
     <>
+      <Toaster reverseOrder={false} />
       <div className="flex flex-col gap-4 m-2 md:w-1/3">
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={() => {
+            handleSubmit(data);
+          }}
+        >
           <input
             className="focus:outline-none w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
             type="text"
@@ -70,7 +88,7 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
           />
           <input
             className="focus:outline-none w-full h-12 px-4 mb-2 text-lg text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-            type="number"
+            type="float"
             onChange={(e) =>
               setData({ ...data, amount: parseInt(e.target.value) })
             }

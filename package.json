@@ -8,7 +8,7 @@
     "lint": "next lint",
     "migrate": "npx prisma migrate dev"
   },
-  "prettier":{
+  "prettier": {
     "semi": true
   },
   "dependencies": {
@@ -26,7 +26,8 @@
     "next": "12.0.9",
     "react": "17.0.2",
     "react-chartjs-2": "^4.0.1",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-hot-toast": "^2.2.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.1",
