@@ -69,8 +69,8 @@ export default function Edit({ transaction }: Props) {
           <h1 className="font-bold text-3xl md:text-4xl text-white tracking-wide text-center">
             Edit Transaction
           </h1>
-          <span className="font-bold text-lg text-white text-center">
-            {transaction.id}
+          <span className="font-bold text-lg text-white text-center underline">
+            Transaction Id: {transaction.id}
           </span>
           <input
             className="focus:outline-none block w-full shadow-sm py-3 text-gray-900 px-4 mb-2 bg-slate-200 placeholder-gray-500  border-gray-700 rounded-md"
