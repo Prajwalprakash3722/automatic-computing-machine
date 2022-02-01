@@ -52,8 +52,10 @@ const HeaderCards = ({ openBalance, transactions }: Props) => {
             } p-6 rounded-lg shadow-lg md:w-1/2 lg:w-1/3 border-2`}
           >
             <h2 className="text-2xl font-bold text-gray-800">
-              Latest Transaction on{" "}
-              <span className="text-indigo-400">{lastTransaction.date}</span>
+              Latest Transaction on <br />
+              <span className="text-indigo-400">
+                {new Date(lastTransaction.date).toDateString()}
+              </span>
             </h2>
             <p className="text-gray-700 text-lg font-normal">
               {lastTransaction.event}

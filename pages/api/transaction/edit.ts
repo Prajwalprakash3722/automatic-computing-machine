@@ -11,7 +11,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
 
     const transaction = req.body;
-    const savedTransaction = await Prisma.transaction.create({ data: transaction });
+    const savedTransaction = await Prisma.transaction.update({
+      where: {
+        id: transaction.id
+      },
+      data: {
+        ...transaction
+      }
+    })
     res.status(200).json(savedTransaction)
   }
   catch (err) {

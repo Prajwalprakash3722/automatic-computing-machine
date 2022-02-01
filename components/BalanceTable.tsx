@@ -96,6 +96,14 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
         filterable: true,
         filter: colFilterer,
       },
+      // TODO add a edit button which redirects to `/edit/{id}`
+      // {
+      //   Header: "Edit",
+      //   accessor: "edit",
+      //   width: 200,
+      //   filterable: true,
+      //   filter: colFilterer,
+      // },
     ],
     []
   );

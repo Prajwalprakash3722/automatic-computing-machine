@@ -1,7 +1,6 @@
 import axios from "axios";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Transaction } from "../types";
-import ErrorAlert from "./Alerts/ErrorAlert";
 import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
@@ -40,11 +39,17 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+      setModal(false);
+      setTransactions([...transactions, data]);
     } catch (error) {
       throw new Error(error as any);
     }
   };
-  const handleSubmit = async (data: Transaction) => {
+  const handleSubmit = async (
+    e: FormEvent<HTMLFormElement>,
+    data: Transaction
+  ) => {
+    e.preventDefault();
     try {
       toast.promise(
         create(data),
@@ -54,7 +59,7 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
           error: "Oops! something went wrong.",
         },
         {
-          duration: 3000,
+          duration: 6000,
         }
       );
     } catch (error) {
@@ -67,8 +72,8 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
       <Toaster reverseOrder={false} />
       <div className="flex flex-col gap-4 m-2 md:w-1/3">
         <form
-          onSubmit={() => {
-            handleSubmit(data);
+          onSubmit={(e) => {
+            handleSubmit(e, data);
           }}
         >
           <input

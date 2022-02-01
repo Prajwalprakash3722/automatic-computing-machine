@@ -9,7 +9,22 @@ import InfoGraphics from "../components/InfoGraphics";
 import Prisma from "../lib/prisma";
 
 export async function getServerSideProps() {
-  const transactions = await Prisma.transaction.findMany();
+  const transactions = await Prisma.transaction.findMany({
+    select: {
+      id: true,
+      event: true,
+      date: true,
+      amount: true,
+      type: true,
+      description: true,
+      signedOff: true,
+      society: true,
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+
   return {
     props: {
       transaction: transactions,

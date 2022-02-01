@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Transaction {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   event       String
   date        String
   amount      Float
@@ -19,4 +19,6 @@ model Transaction {
   description String
   signedOff   String
   society     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
