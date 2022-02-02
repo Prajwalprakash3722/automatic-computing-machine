@@ -2,15 +2,17 @@ import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Transaction } from "../../types";
+import { parseSociety } from "../../Misc/parseSociety";
 
 interface Props {
   label: string[];
   transactions: Transaction[];
+  sid?: number | null;
 }
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function PieChart({ label, transactions }: Props) {
+export default function PieChart({ label, transactions, sid }: Props) {
   const mainTransactions = transactions.filter(
     (transaction) =>
       transaction.society === "Main" && transaction.type !== "open"
@@ -71,6 +73,42 @@ export default function PieChart({ label, transactions }: Props) {
     return acc + curr.amount;
   }, 0);
 
+  const makeSocData = (society: number) => {
+    const txs = transactions.filter(
+      (transaction) => transaction.society === parseSociety(society)
+    );
+
+    return {
+      labels: txs.map((tx) => tx.event),
+      datasets: [
+        {
+          data: txs.map((tx) => tx.amount),
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 64, 64, 0.2)",
+            "rgba(75, 192, 84, 0.2)",
+            "rgba(75, 84, 192, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+            "rgba(75, 192, 84, 1)",
+            "rgba(75, 84, 192, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
   const data = {
     labels: label,
     datasets: [
@@ -110,21 +148,55 @@ export default function PieChart({ label, transactions }: Props) {
     ],
   };
 
+  /**
+   * @description Here the societies will be only able to see their transactions
+   */
+
   return (
-    <Doughnut
-      data={data}
-      options={{
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          title: {
-            display: true,
-            text: "Amount Spent By Societies",
-          },
-        },
-      }}
-      height={400}
-      width={400}
-    />
+    <>
+      {sid === 1 ? (
+        <>
+          <h1 className="text-center font-semibold text-xl text-slate-900">
+            Amount Spent By Societies
+          </h1>
+          <Doughnut
+            data={data}
+            options={{
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Amount Spent By Societies",
+                },
+              },
+            }}
+            height={400}
+            width={400}
+          />
+        </>
+      ) : (
+        <>
+          <h1 className="text-center font-semibold text-xl text-slate-900">{`Amount Spent By ${parseSociety(
+            sid as number
+          )}`}</h1>
+          <Doughnut
+            data={makeSocData(sid as number)}
+            options={{
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                title: {
+                  display: true,
+                  text: `Amount Spent By ${parseSociety(sid as number)}`,
+                },
+              },
+            }}
+            height={400}
+            width={400}
+          />
+        </>
+      )}
+    </>
   );
 }

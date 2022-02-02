@@ -5,18 +5,20 @@ interface Props {
   modal: boolean;
   setModalOpen: Dispatch<SetStateAction<boolean>>;
   transactions: Transaction[];
+  sid?: number | null;
 }
 
-const InfoGraphics = ({ modal, setModalOpen, transactions }: Props) => {
+const InfoGraphics = ({ modal, setModalOpen, transactions, sid }: Props) => {
   const soc = [
     "Main",
     "Computer Society",
     "Communication Society",
     "SPS",
     "APS",
+    "RAS",
+    "PES",
     "Sight",
     "WIE",
-    "RAS",
   ];
 
   return (
@@ -46,7 +48,7 @@ const InfoGraphics = ({ modal, setModalOpen, transactions }: Props) => {
       </div>
       {modal && (
         <div className="bg-gray-50 p-5 m-2">
-          <DoughNut label={soc} transactions={transactions} />
+          <DoughNut label={soc} transactions={transactions} sid={sid} />
         </div>
       )}
     </>

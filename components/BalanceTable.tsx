@@ -164,9 +164,9 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
                   {row.original.type !== "open" && (
                     <>
-                      <div className="flex items-start justify-evenly">
+                      <div className="flex items-start justify-between">
                         <Link href="/edit/[id]" as={`/edit/${row.original.id}`}>
-                          <a className="mr-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                          <a className="m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
                             <PencilIcon className="h-6 w-6" />
                           </a>
                         </Link>
@@ -174,7 +174,7 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
                           href="/edit/[id]"
                           as={`/delete/${row.original.id}`}
                         >
-                          <a className="mr-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                          <a className="m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
                             <TrashIcon className="h-6 w-6" />
                           </a>
                         </Link>

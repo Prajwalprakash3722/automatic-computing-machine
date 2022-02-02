@@ -2,23 +2,26 @@ import axios from "axios";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Transaction } from "../types";
 import toast, { Toaster } from "react-hot-toast";
+import { parseSociety } from "../Misc/parseSociety";
 
 interface Props {
   transactions: Transaction[];
   setTransactions: Dispatch<SetStateAction<Transaction[]>>;
   setModal: Dispatch<SetStateAction<boolean>>;
+  sid?: number | null;
 }
 
-const Form = ({ transactions, setTransactions, setModal }: Props) => {
+const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
   const soc = [
     "Main",
     "Computer Society",
     "Communication Society",
     "SPS",
     "APS",
+    "RAS",
+    "PES",
     "Sight",
     "WIE",
-    "RAS",
   ];
 
   const [data, setData] = useState<Transaction>({
@@ -36,7 +39,7 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
       await axios.post("http://localhost:3000/api/transaction/add", data, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: localStorage.getItem("token") as string,
         },
       });
       setModal(false);
@@ -59,7 +62,7 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
           error: "Oops! something went wrong.",
         },
         {
-          duration: 6000,
+          duration: 3000,
         }
       );
     } catch (error) {
@@ -140,11 +143,20 @@ const Form = ({ transactions, setTransactions, setModal }: Props) => {
               onChange={(e) => setData({ ...data, society: e.target.value })}
               required
             >
-              {soc.map((s, index) => (
-                <option value={s} key={index}>
-                  {s}
+              {sid === 1 ? (
+                <>
+                  {soc.map((s, index) => (
+                    <option value={s} key={index}>
+                      {s}
+                    </option>
+                  ))}
+                </>
+              ) : (
+                <option value={parseSociety(sid as number)}>
+                  {parseSociety(sid as number)}
                 </option>
-              ))}
+              )}
+              )
             </select>
             <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
               <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">

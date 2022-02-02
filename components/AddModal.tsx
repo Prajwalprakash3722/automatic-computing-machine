@@ -7,12 +7,14 @@ interface Props {
   setModalOpen: Dispatch<SetStateAction<boolean>>;
   transactions: Transaction[];
   setTransactions: Dispatch<SetStateAction<Transaction[]>>;
+  sid?: number | null;
 }
 
 const AddModal = ({
   modal,
-  setModalOpen,
   transactions,
+  sid,
+  setModalOpen,
   setTransactions,
 }: Props) => {
   return (
@@ -54,6 +56,7 @@ const AddModal = ({
             transactions={transactions}
             setTransactions={setTransactions}
             setModal={setModalOpen}
+            sid={sid}
           />
         </div>
       )}

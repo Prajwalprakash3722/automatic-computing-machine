@@ -12,17 +12,17 @@ export const authenticated = (fn: NextApiHandler) => async (
   res: NextApiResponse
 ) => {
 
-  const atoken = req.headers.authorization?.split(' ')[1];
+  const atoken = req.headers.authorization;
 
   verify(atoken!, process.env.ACCESS_TOKEN_SECRET as string, async function (err, decoded) {
     if (!err && decoded) {
-
       //! Any idea how to pass the decoded token to the handler ?
-
       return await fn(req, res);
     }
+    else if (err) {
 
-    res.status(401).json({ message: 'Auth Failed' });
+      res.status(401).json({ message: 'Auth Failed' });
+    }
   });
 };
 
