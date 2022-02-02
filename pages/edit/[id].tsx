@@ -26,17 +26,17 @@ export default function Edit({ transaction }: Props) {
 
   const [data, setData] = useState<Transaction>(transaction);
   const [token, setToken] = useState<string | null>(null);
-  const [sid, setSid] = useState<number | null>(1);
+  const [sid, setSid] = useState<number | null>(null);
   useEffect(() => {
     setToken(localStorage.getItem("token"));
-    // setSid(localStorage.getItem("sid") as unknown as number);
+    setSid(parseInt(localStorage.getItem("sid") as string));
   }, []);
   const create = async (data: Transaction) => {
     try {
       await axios.post("http://localhost:3000/api/transaction/edit", data, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: localStorage.getItem("token") as string,
         },
       });
     } catch (error) {
@@ -169,7 +169,9 @@ export default function Edit({ transaction }: Props) {
                       ))}
                     </>
                   ) : (
-                    <option>{parseSociety(sid as number)}</option>
+                    <option value={parseSociety(sid as number)}>
+                      {parseSociety(sid as number)}
+                    </option>
                   )}
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">

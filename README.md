@@ -2,6 +2,14 @@
 
 ### This is a Account Maintaining System for IEEE RVCE SB.
 
+## Updates
+
+- As of Now Everything is complete except the `sid` pulling from `site-rear` api [#31](https://github.com/IEEE-RVCE/site-rear/pull/31), if this PR is merged then the `sid` will be pulled from `site-rear` api and stored in the localstorage.
+
+- Paging and Filtering must be done [@chrisvrose](https://github.com/chrisvrose)
+
+- see **Very High Priority** section for Some Improvements that must be done in future.
+
 #### As of now we have following features:
 
 - Login
@@ -21,7 +29,7 @@
 
 #### Very High Priority
 
-- Pass the decoded token to the next function ,refer [api/transaction/add](https://github.com/IEEE-RVCE/Accounts/blob/17ea7b2c0fb3bccb6eff09ea7a564b910e13bdfa/pages/api/transaction/add.ts#L10)
+- Pass the decoded token to the next function ,refer [api/transaction/add](https://github.com/IEEE-RVCE/Accounts/blob/17ea7b2c0fb3bccb6eff09ea7a564b910e13bdfa/pages/api/transaction/add.ts#L10) As of now we are storing the sid in local storage, this is just a workaround some day it might be taken as advantage, so the search for `how to pass decoded token` goes on....
 
 #### Low Priority:
 

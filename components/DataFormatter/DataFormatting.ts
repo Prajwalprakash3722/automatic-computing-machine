@@ -11,7 +11,7 @@ export const tableHeader: DataRow = [
   "Balance",
 ];
 
-export function getTransactionRows(transactions: Transaction[]): DataRow[] {
+export function getTransactionRows(transactions: Transaction[], sid: number | null): DataRow[] {
   const tableRows: DataRow[] = [];
   let balance = 0;
 
@@ -22,7 +22,7 @@ export function getTransactionRows(transactions: Transaction[]): DataRow[] {
   transactions.forEach((data) => {
     if (data.type === "credit" || data.type === "open") balance += data.amount;
     else balance -= data.amount;
-   
+
 
     const ticketData: DataRow = [
       data.id ?? "",
@@ -30,7 +30,7 @@ export function getTransactionRows(transactions: Transaction[]): DataRow[] {
       data.society,
       parseRupees(data.amount),
       data.type,
-      parseRupees(balance),
+      sid === 1 ? parseRupees(balance) : "",
     ];
     return tableRows.push(ticketData);
   });
@@ -44,6 +44,9 @@ export function getTransactionRows(transactions: Transaction[]): DataRow[] {
     "",
     parseRupees(balance),
   ];
-  tableRows.push(summaryRow);
+  if (sid === 1) {
+
+    tableRows.push(summaryRow);
+  }
   return tableRows;
 }

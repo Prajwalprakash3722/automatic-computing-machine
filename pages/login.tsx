@@ -33,6 +33,7 @@ const Login = () => {
         setSuccess(true);
         localStorage.setItem("token", res.data.atoken);
         localStorage.setItem("isAuthenticated", "true");
+        localStorage.setItem("sid", res.data.sid);
         window.location.replace(window.location.origin);
       }
     } catch (err) {

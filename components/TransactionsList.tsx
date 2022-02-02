@@ -5,9 +5,10 @@ import generateExcelSheet from "./DataFormatter/WholeXcelGen";
 
 interface Props {
   transactions: Transaction[];
+  sid?: number | null;
 }
 
-const TransactionsList = ({ transactions }: Props) => {
+const TransactionsList = ({ transactions, sid }: Props) => {
   return (
     <div className="flex flex-col bg-slate-50 p-8 justify-evenly gap-2">
       <div className="flex flex-col justify-start">
@@ -16,7 +17,7 @@ const TransactionsList = ({ transactions }: Props) => {
             <div className="flex flex-row">
               <button
                 onClick={() => {
-                  generatePDF(transactions);
+                  generatePDF(transactions, sid);
                 }}
                 className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer"
               >

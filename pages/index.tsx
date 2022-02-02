@@ -34,10 +34,10 @@ export default function Index() {
   const [modal, setModalOpen] = useState(false);
   const [infographics, setInfographics] = useState(false);
   const [token, setToken] = useState<string | null>(null);
-  const [sid, setSid] = useState<number | null>(1);
+  const [sid, setSid] = useState<number | null>(null);
   useEffect(() => {
     setToken(localStorage.getItem("token"));
-
+    setSid(parseInt(localStorage.getItem("sid") as string));
     const data = {
       society: sid,
     };
@@ -89,7 +89,7 @@ export default function Index() {
               />
             )}
           </div>
-          <BalanceList transactions={transactions} />
+          <BalanceList transactions={transactions} sid={sid} />
         </>
       ) : (
         <>

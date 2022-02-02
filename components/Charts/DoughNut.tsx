@@ -40,6 +40,10 @@ export default function PieChart({ label, transactions, sid }: Props) {
     (transaction) => transaction.society === "RAS"
   );
 
+  const pesTransactions = transactions.filter(
+    (transaction) => transaction.society === "PES"
+  );
+
   const mainTotal = mainTransactions.reduce((acc, curr) => {
     return acc + curr.amount;
   }, 0);
@@ -73,6 +77,10 @@ export default function PieChart({ label, transactions, sid }: Props) {
     return acc + curr.amount;
   }, 0);
 
+  const pesTotal = pesTransactions.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+
   const makeSocData = (society: number) => {
     const txs = transactions.filter(
       (transaction) => transaction.society === parseSociety(society)
@@ -87,6 +95,7 @@ export default function PieChart({ label, transactions, sid }: Props) {
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
             "rgba(255, 206, 86, 0.2)",
+            "rgba(84, 206, 86, 0.2)",
             "rgba(75, 192, 192, 0.2)",
             "rgba(153, 102, 255, 0.2)",
             "rgba(255, 64, 64, 0.2)",
@@ -97,6 +106,7 @@ export default function PieChart({ label, transactions, sid }: Props) {
             "rgba(255, 99, 132, 1)",
             "rgba(54, 162, 235, 1)",
             "rgba(255, 206, 86, 1)",
+            "rgba(84, 206, 86, 1)",
             "rgba(75, 192, 192, 1)",
             "rgba(153, 102, 255, 1)",
             "rgba(255, 159, 64, 1)",
@@ -119,9 +129,10 @@ export default function PieChart({ label, transactions, sid }: Props) {
           communicationSocietyTotal,
           spsTotal,
           apsTotal,
+          rasTotal,
+          pesTotal,
           sightTotal,
           wieTotal,
-          rasTotal,
         ],
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",

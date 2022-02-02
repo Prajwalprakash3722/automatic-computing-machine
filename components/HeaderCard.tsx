@@ -25,7 +25,6 @@ const HeaderCards = ({ openBalance, transactions, sid }: Props) => {
     openBalance +
     creditTranscations.reduce((acc, curr) => acc + curr.amount, 0) -
     debitTranscations.reduce((acc, curr) => acc + curr.amount, 0);
-
   return (
     <>
       <div>
@@ -70,7 +69,7 @@ const HeaderCards = ({ openBalance, transactions, sid }: Props) => {
                   </span>
                 </h2>
                 <p className="text-gray-700 text-lg font-normal">
-                  {lastTransaction.event}
+                  {lastTransaction.event} by <b>{lastTransaction.society}</b>
                 </p>
                 <p className="text-gray-700 text-2xl font-semibold">
                   &#8377;{parseRupees(lastTransaction.amount)}
