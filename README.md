@@ -27,6 +27,15 @@
 
 #### To be Done
 
+- Add one more level of Authentication
+
+  - Main Execom Level
+  - Society Level
+  - **Branch Counsellor Level**
+
+- Branch Counsellors cannot add or modify the transactions of the societies, they can only approve or reject the requests of the societies.
+- PDF Uploading facility for uploading bills and financial reports
+
 #### Very High Priority
 
 - Pass the decoded token to the next function ,refer [api/transaction/add](https://github.com/IEEE-RVCE/Accounts/blob/17ea7b2c0fb3bccb6eff09ea7a564b910e13bdfa/pages/api/transaction/add.ts#L10) As of now we are storing the sid in local storage, this is just a workaround some day it might be taken as advantage, so the search for `how to pass decoded token` goes on....
@@ -40,3 +49,6 @@
 #### Critical Section
 
 - As of now we are hardcoding the opening balance, if anyone has a better idea please feel free to suggest.
+
+* Branch counsellors and Main treasurer (signned of by)
+* feauture for pdf uploading

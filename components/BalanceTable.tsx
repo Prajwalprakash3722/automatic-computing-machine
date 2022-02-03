@@ -91,19 +91,13 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
         filter: colFilterer,
       },
     ],
-    []
+    [colFilterer]
   );
 
   function Table({ columns, data }: any) {
     // Use the state and functions returned from useTable to build your UI
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-      useTable(
-        {
-          columns,
-          data,
-        },
-        useFilters
-      );
+    const { getTableProps, getTableBodyProps, headerGroups, prepareRow, rows } =
+      useTable({ columns, data }, useFilters);
 
     // Render the UI for your table
     return (
@@ -113,12 +107,15 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
       >
         <thead className="bg-gray-800">
           {headerGroups.map((headerGroup, index) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={index}>
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              key={index + Math.random() * 100}
+            >
               {headerGroup.headers.map((column) => (
                 <th
                   className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
                   {...column.getHeaderProps()}
-                  key={index}
+                  key={index + Math.random() * 1000}
                 >
                   {column.render("Header")}
                 </th>
@@ -139,7 +136,12 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()} key={row.original.id}>
+              // ! We should do something about this error, docker wont build without this
+              <tr
+                {...row.getRowProps()}
+                key={row.original.id}
+                className="transform transition duration-200 hover:bg-gray-600 cursor-pointer"
+              >
                 {row.cells.map((cell) => {
                   return (
                     <td

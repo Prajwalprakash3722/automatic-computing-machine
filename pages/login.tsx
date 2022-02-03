@@ -2,8 +2,7 @@ import axios from "axios";
 import { NextPage } from "next";
 import React, { useEffect, useMemo, useState } from "react";
 import { API_URL } from "../Misc/api";
-import SuccessAlert from "../components/Alerts/SuccessAlert";
-import ErrorAlert from "../components/Alerts/ErrorAlert";
+import { Toaster, toast } from "react-hot-toast";
 import { User } from "../types";
 import Link from "next/link";
 const Login = () => {
@@ -11,43 +10,48 @@ const Login = () => {
     ieeeid: "",
     password: "",
   });
-  const [error, setError] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const Login = async () => {
     try {
       const res = await axios.post(API_URL + "/api/auth", {
         uid: user.ieeeid,
         pwd: user.password,
       });
-
       if (res.data.ok === true && res.data.auth === true) {
-        setSuccess(true);
+        toast.success("Login Successful", {
+          duration: 2900,
+        });
         localStorage.setItem("token", res.data.atoken);
         localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("sid", res.data.sid);
-        window.location.replace(window.location.origin);
+        localStorage.setItem("sid", "1");
+        setTimeout(() => {
+          window.location.replace(window.location.origin);
+        }, 3000);
+      } else if (res.data.ok === false && res.data.status === "Bad fields") {
+        toast.error("Bad fields", {
+          duration: 2900,
+        });
       }
     } catch (err) {
-      setError(true);
-      setErrorMessage("Some Thing Went Wrong, Please Try Again Later");
+      toast.error("Login Failed");
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    Login();
   };
 
   return (
     <>
       {!token ? (
         <>
-          {success && <SuccessAlert message="Logged In Successfully" />}
-          {error && <ErrorAlert message={errorMessage} />}
+          <Toaster position="top-center" reverseOrder={false} />
           <div className="flex flex-col justify-center  min-h-screen p-4">
             <div className="border-2 border-blue-400 w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg ">
               <div className="px-6 py-4">
