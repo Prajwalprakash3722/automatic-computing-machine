@@ -1,14 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { verify } from 'jsonwebtoken';
+import { JwtPayload, verify } from 'jsonwebtoken';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 import Prisma from "../../../lib/prisma"
+import { Transaction } from '../../../types';
 
-
-
-
+export interface ApiRequest extends NextApiRequest {
+  user?: JwtPayload | String;
+}
 
 export const authenticated = (fn: NextApiHandler) => async (
-  req: NextApiRequest,
+  req: ApiRequest,
   res: NextApiResponse
 ) => {
 
@@ -16,7 +17,8 @@ export const authenticated = (fn: NextApiHandler) => async (
 
   verify(atoken!, process.env.ACCESS_TOKEN_SECRET as string, async function (err, decoded) {
     if (!err && decoded) {
-      //! Any idea how to pass the decoded token to the handler ?
+
+      req.user = decoded;
       return await fn(req, res);
     }
     else if (err) {
@@ -32,11 +34,40 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
   }
   try {
 
-    const transaction = req.body;
-    const savedTransaction = await Prisma.transaction.create({ data: transaction });
+    const {
+      event,
+      date,
+      amount,
+      type,
+      description,
+      signedOff,
+      society,
+      assets }: Transaction = req.body;
+    const savedTransaction = await Prisma.transaction.create({
+      data: {
+        event,
+        date,
+        amount,
+        type,
+        description,
+        signedOff,
+        society,
+        assets: {
+          createMany: {
+            data:
+              [
+                ...assets.map(asset => ({
+                  link: asset
+                }))
+              ]
+          }
+        }
+      }
+    });
     res.status(200).json(savedTransaction)
   }
   catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Something went Wrong' })
   }
 }

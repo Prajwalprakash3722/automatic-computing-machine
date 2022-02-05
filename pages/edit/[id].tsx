@@ -1,5 +1,4 @@
 import axios from "axios";
-import { verify } from "jsonwebtoken";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,14 +22,15 @@ export default function Edit({ transaction }: Props) {
     "Sight",
     "WIE",
   ];
-
   const [data, setData] = useState<Transaction>(transaction);
   const [token, setToken] = useState<string | null>(null);
   const [sid, setSid] = useState<number | null>(null);
+
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     setSid(parseInt(localStorage.getItem("sid") as string));
   }, []);
+
   const create = async (data: Transaction) => {
     try {
       await axios.post("http://localhost:3000/api/transaction/edit", data, {
@@ -42,6 +42,19 @@ export default function Edit({ transaction }: Props) {
     } catch (error) {
       throw new Error(error as any);
     }
+  };
+  const pushData = (url: string) => {
+    setData({
+      ...data,
+      assets: [...data.assets, url],
+    });
+  };
+
+  const handleDelete = (index: number) => {
+    setData({
+      ...data,
+      assets: data.assets.filter((_, i) => i !== index),
+    });
   };
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement>,
@@ -224,6 +237,11 @@ export async function getServerSideProps(context: { query: { id: any } }) {
       description: true,
       signedOff: true,
       society: true,
+      assets: {
+        select: {
+          link: true,
+        },
+      },
     },
   });
   return {

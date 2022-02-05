@@ -7,6 +7,7 @@ export type Transaction = {
   description: string;
   signedOff: string;
   society: string;
+  assets: string[];
 };
 
 export type User = {

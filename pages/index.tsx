@@ -27,6 +27,7 @@ export default function Index() {
       society: "",
       createdAt: "",
       updatedAt: "",
+      assets: [],
     },
   ];
 

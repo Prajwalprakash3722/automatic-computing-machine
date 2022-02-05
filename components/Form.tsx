@@ -12,6 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { parseSociety } from "../Misc/parseSociety";
 import { storage } from "../lib/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { TrashIcon } from "@heroicons/react/solid";
 
 interface Props {
   transactions: Transaction[];
@@ -41,6 +42,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
     description: "",
     signedOff: "",
     society: "",
+    assets: [],
   });
 
   React.useEffect(() => {
@@ -54,31 +56,48 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
     );
   }, [sid]);
 
-  const [url, setUrl] = useState("");
+  const pushData = (url: string) => {
+    setData({
+      ...data,
+      assets: [...data.assets, url],
+    });
+  };
+
+  const handleDelete = (index: number) => {
+    setData({
+      ...data,
+      assets: data.assets.filter((_, i) => i !== index),
+    });
+  };
+
   const [uploaded, setUploaded] = useState(false);
   const [file, setFile] = useState<File | null>(
     new File([], "", { type: "application/pdf" })
   );
   const createUpload = async () => {
-    const imageRef = await ref(
-      storage,
-      `${parseSociety(sid as number)}/${data.event}/${file!.name}`
-    );
-    await uploadBytes(imageRef, file!)
-      .then(() => {
-        getDownloadURL(imageRef)
-          .then((url) => {
-            setUrl(url);
-            setUploaded(true);
-          })
-          .catch((error) => {
-            console.log(error.message, "error getting the image url");
-          });
-        setFile(null);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    if (data.event !== "" && data.society !== "") {
+      const imageRef = await ref(
+        storage,
+        `${parseSociety(sid as number)}/${data.event}/${file!.name}`
+      );
+      await uploadBytes(imageRef, file!)
+        .then(() => {
+          getDownloadURL(imageRef)
+            .then((url) => {
+              pushData(url);
+              setUploaded(true);
+            })
+            .catch((error) => {
+              console.log(error.message, "error getting the image url");
+            });
+          setFile(null);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    } else {
+      toast.error("Please fill in all the fields");
+    }
   };
 
   const handleUpload = (e: MouseEvent<HTMLButtonElement>) => {
@@ -214,7 +233,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
             placeholder="Signed Off By"
             required
           />
-          {!sid ? (
+          {sid === 1 ? (
             <div className="relative inline-block w-full text-gray-700">
               <select
                 className="focus:outline-none w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
@@ -227,7 +246,6 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
                         society: parseSociety(sid as number) as string,
                       });
                 }}
-                value={parseSociety(sid as number)}
                 required
               >
                 {soc.map((s, index) => (
@@ -263,9 +281,16 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
               className="focus:outline-none w-full h-12 px-4 m-2 text-lg text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
               type="file"
               onChange={(e) => {
-                setFile(e.target.files![0] as File);
+                if (
+                  e.target.files![0].type === "application/pdf"
+                  // || e.target.files![0].type === ""
+                ) {
+                  setFile(e.target.files![0] as File);
+                } else {
+                  toast.error("Please upload a valid file");
+                }
               }}
-              placeholder="Event Amount"
+              placeholder="Event Reports"
               required
             />
             <button
@@ -276,6 +301,35 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
             >
               Upload Files
             </button>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="w-fit bg-slate-200 p-4 rounded-lg justify-around gap-2">
+              <h1 className="text-center m-2">
+                Total Reports Uploaded : {data.assets.length}
+              </h1>
+              {data.assets.map((a, index) => (
+                <div
+                  key={index}
+                  className=" flex flex-row items-center justify-around mb-2"
+                >
+                  <div className="gap-4 font-bold text-lg text-white text-center flex flex-row justify-between">
+                    <a href={a.link} target="blank">
+                      <div className="p-2 w-full justify-center border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-800 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Report-{index + 1}
+                      </div>
+                    </a>
+                    <span className="flex p-2 items-center justify-center border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-red-800 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                      <TrashIcon
+                        className="h-6 w-6"
+                        onClick={() => {
+                          handleDelete(index);
+                        }}
+                      />
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           <button
             type="submit"

@@ -97,7 +97,7 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
   function Table({ columns, data }: any) {
     // Use the state and functions returned from useTable to build your UI
     const { getTableProps, getTableBodyProps, headerGroups, prepareRow, rows } =
-      useTable({ columns, data }, useFilters);
+      useTable<Transaction>({ columns, data }, useFilters);
 
     // Render the UI for your table
     return (
@@ -136,55 +136,64 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
           {rows.map((row, i) => {
             prepareRow(row);
             return (
-              // ! We should do something about this error, docker wont build without this
-              <tr
-                {...row.getRowProps()}
-                key={row.original.id}
-                className="transform transition duration-200 hover:bg-gray-600 cursor-pointer"
-              >
-                {row.cells.map((cell) => {
-                  return (
-                    <td
-                      className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white"
-                      {...cell.getCellProps()}
-                      key={i}
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  );
-                })}
-                {/**There is a error here but its react table bug not out fault, Dw :) */}
-                <td className="px-16 py-4 whitespace-nowrap text-sm font-medium text-white">
-                  <span
-                    className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${TransactionType(
-                      row.original.type
-                    )}`}
+              <>
+                <Link
+                  href={`/transaction/${row.original.id as string}`}
+                  passHref={true}
+                >
+                  <tr
+                    {...row.getRowProps()}
+                    key={row.original.id}
+                    className="transform transition duration-200 hover:bg-gray-600 cursor-pointer"
                   >
-                    {row.original.type}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                  {row.original.type !== "open" && (
-                    <>
-                      <div className="flex items-start justify-between">
-                        <Link href="/edit/[id]" as={`/edit/${row.original.id}`}>
-                          <a className="m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
-                            <PencilIcon className="h-6 w-6" />
-                          </a>
-                        </Link>
-                        <Link
-                          href="/edit/[id]"
-                          as={`/delete/${row.original.id}`}
+                    {row.cells.map((cell) => {
+                      return (
+                        <td
+                          className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white"
+                          {...cell.getCellProps()}
+                          key={i}
                         >
-                          <a className="m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
-                            <TrashIcon className="h-6 w-6" />
-                          </a>
-                        </Link>
-                      </div>
-                    </>
-                  )}
-                </td>
-              </tr>
+                          {cell.render("Cell")}
+                        </td>
+                      );
+                    })}
+                    {/**There is a error here but its react table bug not out fault, Dw :) */}
+                    <td className="px-16 py-4 whitespace-nowrap text-sm font-medium text-white">
+                      <span
+                        className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${TransactionType(
+                          row.original.type
+                        )}`}
+                      >
+                        {row.original.type}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                      {row.original.type !== "open" && (
+                        <>
+                          <div className="flex items-start justify-between">
+                            <Link
+                              href="/edit/[id]"
+                              as={`/edit/${row.original.id}`}
+                            >
+                              <a className="m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                <PencilIcon className="h-6 w-6" />
+                              </a>
+                            </Link>
+                            <Link
+                              href="/edit/[id]"
+                              as={`/delete/${row.original.id}`}
+                            >
+                              <a className="m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                <TrashIcon className="h-6 w-6" />
+                              </a>
+                            </Link>
+                          </div>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                </Link>
+              </>
             );
           })}
         </tbody>

@@ -28,7 +28,7 @@ const Login = () => {
         });
         localStorage.setItem("token", res.data.atoken);
         localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("sid", "1");
+        localStorage.setItem("sid", "8");
         setTimeout(() => {
           window.location.replace(window.location.origin);
         }, 3000);
