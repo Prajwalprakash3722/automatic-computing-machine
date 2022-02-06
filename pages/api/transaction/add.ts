@@ -41,14 +41,16 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
       type,
       description,
       signedOff,
+      level,
       society,
-      assets }: Transaction = req.body;
+      assets, ApprovedComments }: Transaction = req.body;
     const savedTransaction = await Prisma.transaction.create({
       data: {
         event,
         date,
         amount,
         type,
+        level,
         description,
         signedOff,
         society,
@@ -57,7 +59,19 @@ export default authenticated(async function handler(req: NextApiRequest, res: Ne
             data:
               [
                 ...assets.map(asset => ({
-                  link: asset
+                  url: asset.url,
+                  type: asset.type
+                }))
+              ]
+          }
+        },
+        ApprovedComments: {
+          createMany: {
+            data:
+              [
+                ...ApprovedComments.map(comment => ({
+                  comment: comment.comment,
+                  by: comment.by
                 }))
               ]
           }

@@ -7,10 +7,24 @@ export type Transaction = {
   description: string;
   signedOff: string;
   society: string;
-  assets: string[];
+  assets: Assets[];
+  LastStatus: boolean;
+  level: number;
+  ApprovedComments: ApprovedComments[];
+  RejectedComments: string[];
 };
 
 export type User = {
   ieeeid: string;
   password: string;
+}
+
+interface ApprovedComments {
+  comment: string;
+  by: string;
+}
+
+type Assets = {
+  url: string;
+  type: string;
 }

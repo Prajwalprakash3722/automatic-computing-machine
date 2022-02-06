@@ -37,6 +37,18 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
     "Type",
     "Remarks",
   ];
+  /**
+   *
+   * @returns Checks if the logged user is counsellor or branch counsellor and returns the respective access
+   */
+  const isEditable = () => {
+    if (
+      parseInt(localStorage.getItem("role")!) === 2 ||
+      parseInt(localStorage.getItem("role")!) === 4
+    ) {
+      return false;
+    } else return true;
+  };
 
   const colFilterer = useMemo(() => {
     return {
@@ -123,9 +135,11 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 Transaction Type
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
-                Actions
-              </th>
+              {isEditable() && (
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  Actions
+                </th>
+              )}
             </tr>
           ))}
         </thead>
@@ -157,7 +171,6 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
                         </td>
                       );
                     })}
-                    {/**There is a error here but its react table bug not out fault, Dw :) */}
                     <td className="px-16 py-4 whitespace-nowrap text-sm font-medium text-white">
                       <span
                         className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${TransactionType(
@@ -167,30 +180,32 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
                         {row.original.type}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                      {row.original.type !== "open" && (
-                        <>
-                          <div className="flex items-start justify-between">
-                            <Link
-                              href="/edit/[id]"
-                              as={`/edit/${row.original.id}`}
-                            >
-                              <a className="m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
-                                <PencilIcon className="h-6 w-6" />
-                              </a>
-                            </Link>
-                            <Link
-                              href="/edit/[id]"
-                              as={`/delete/${row.original.id}`}
-                            >
-                              <a className="m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
-                                <TrashIcon className="h-6 w-6" />
-                              </a>
-                            </Link>
-                          </div>
-                        </>
-                      )}
-                    </td>
+                    {isEditable() && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                        {row.original.type !== "open" && (
+                          <>
+                            <div className="flex items-start justify-between">
+                              <Link
+                                href="/edit/[id]"
+                                as={`/edit/${row.original.id}`}
+                              >
+                                <a className="m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                  <PencilIcon className="h-6 w-6" />
+                                </a>
+                              </Link>
+                              <Link
+                                href="/edit/[id]"
+                                as={`/delete/${row.original.id}`}
+                              >
+                                <a className="m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                  <TrashIcon className="h-6 w-6" />
+                                </a>
+                              </Link>
+                            </div>
+                          </>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 </Link>
               </>

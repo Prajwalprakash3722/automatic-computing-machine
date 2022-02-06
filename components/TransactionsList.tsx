@@ -17,7 +17,7 @@ const TransactionsList = ({ transactions, sid }: Props) => {
             <div className="flex flex-row">
               <button
                 onClick={() => {
-                  generatePDF(transactions, sid);
+                  generatePDF(transactions, sid as number);
                 }}
                 className="m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer"
               >

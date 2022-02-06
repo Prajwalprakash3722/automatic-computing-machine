@@ -37,24 +37,35 @@ export default function View({ transaction }: Props) {
       <Toaster reverseOrder={false} />
       {token ? (
         <>
-          <div className="border-2 border-blue-400 w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg ">
-            <div className="px-6 py-4 text-3xl font-bold">
-              <h2 className=" text-center  text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to bg-green-500">
-                View Transaction
-              </h2>
-            </div>
-          </div>
-          <div>
-            Assets:
-            {data.assets.map((a) => {
-              return (
-                <>
-                  <a href={a.link}>{a.link}</a>
-                  <br />
-                </>
-              );
-            })}
-          </div>
+          {data ? (
+            <>
+              <div className="border-2 border-blue-400 w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg ">
+                <div className="px-6 py-4 text-3xl font-bold">
+                  <h2 className=" text-center  text-transparent bg-gradient-to-r bg-clip-text from-blue-500 to bg-green-500">
+                    View Transaction
+                  </h2>
+                </div>
+              </div>
+              <div>
+                Assets:
+                <br />
+                {data.assets.map((a: any, index) => {
+                  return (
+                    <>
+                      <a href={a.url}>Report-{index + 1}</a>
+                      <br />
+                    </>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="text-center text-2xl font-bold m-4 text-blue-400">
+                No Id Found, Go back and refresh
+              </h1>
+            </>
+          )}
         </>
       ) : (
         <>
@@ -89,7 +100,8 @@ export async function getServerSideProps(context: { query: { id: any } }) {
       society: true,
       assets: {
         select: {
-          link: true,
+          url: true,
+          type: true,
         },
       },
     },

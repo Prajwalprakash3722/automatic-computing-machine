@@ -55,6 +55,11 @@ export default function Header() {
       path: "/",
       auth: true,
     },
+    {
+      name: "Approval",
+      path: "/approval",
+      auth: true,
+    },
   ];
 
   const AuthListItems = {

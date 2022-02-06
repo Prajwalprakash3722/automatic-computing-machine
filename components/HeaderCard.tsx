@@ -1,17 +1,18 @@
-import { parseSociety } from "../Misc/parseSociety";
+import { useState } from "react";
+import { parseRole, parseSociety } from "../Misc/parseSociety";
 import { Transaction } from "../types";
 
 interface Props {
   openBalance: number;
   transactions: Transaction[];
   sid?: number | null;
+  role?: number | null;
 }
 
-const HeaderCards = ({ openBalance, transactions, sid }: Props) => {
+const HeaderCards = ({ openBalance, transactions, sid, role }: Props) => {
   const parseRupees = (num: number) => {
     return new Intl.NumberFormat("en-IN").format(num);
   };
-
   const lastTransaction = transactions[transactions.length - 1];
 
   const debitTranscations = transactions.filter(
@@ -35,7 +36,7 @@ const HeaderCards = ({ openBalance, transactions, sid }: Props) => {
           <h3 className="text-2xl font-bold text-center text-slate-800 bg-blue-100">
             Logged As:{" "}
             <span className="text-blue-600 underline">
-              {parseSociety(sid as number)}
+              {parseSociety(sid as number)} {parseRole(role as number)}
             </span>
           </h3>
         </div>

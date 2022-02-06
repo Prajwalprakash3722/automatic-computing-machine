@@ -28,7 +28,8 @@ const Login = () => {
         });
         localStorage.setItem("token", res.data.atoken);
         localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("sid", "8");
+        localStorage.setItem("sid", "1");
+        localStorage.setItem("role", "3");
         setTimeout(() => {
           window.location.replace(window.location.origin);
         }, 3000);
@@ -38,7 +39,7 @@ const Login = () => {
         });
       }
     } catch (err) {
-      toast.error("Login Failed");
+      toast.error("Login Failed, Check your credentials");
     }
   };
 

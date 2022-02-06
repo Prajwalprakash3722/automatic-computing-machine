@@ -23,7 +23,7 @@ export default async function generateExcelSheet(transactions: Transaction[]) {
 function processExcelTransactions(ts: Transaction[], ws: exceljs.Worksheet) {
   const transactionRows = getTransactionRows(ts);
   const header = tableHeader;
-  const tableData = [header,...transactionRows];
+  const tableData = [header, ...transactionRows];
 
   ws.addRows(tableData);
 }

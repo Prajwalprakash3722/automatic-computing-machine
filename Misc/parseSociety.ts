@@ -40,3 +40,28 @@ export const parseSociety = (society: number) => {
   }
   return soc;
 }
+
+export const parseRole = (role: number) => {
+
+  let rol;
+
+
+  switch (role) {
+    case 1:
+      rol = 'Student Treasurer'; // Student Treasurer
+      break;
+    case 2:
+      rol = 'Society Counsellor'; // Society Counsellor
+      break;
+    case 3:
+      rol = 'Treasurer'; // Main Treasurer
+      break;
+    case 4:
+      rol = 'Branch Counsellor'; // Branch Counsellor
+      break;
+    case 5:
+      rol = 'Accounts Dept'; // Accounts Dept
+      break;
+  }
+  return rol;
+}

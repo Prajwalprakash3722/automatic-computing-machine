@@ -52,3 +52,4 @@
 
 * Branch counsellors and Main treasurer (signned of by)
 * feauture for pdf uploading
+* separate the pdf uploading into reports and bill section

@@ -28,6 +28,10 @@ export default function Index() {
       createdAt: "",
       updatedAt: "",
       assets: [],
+      LastStatus: false,
+      level: 1,
+      ApprovedComments: [],
+      RejectedComments: [],
     },
   ];
 
@@ -36,9 +40,13 @@ export default function Index() {
   const [infographics, setInfographics] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const [sid, setSid] = useState<number | null>(null);
+  const [role, setRole] = useState<number | null>(null);
+
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     setSid(parseInt(localStorage.getItem("sid") as string));
+    setRole(parseInt(localStorage.getItem("role") as string));
+
     const data = {
       society: sid,
     };
@@ -70,6 +78,7 @@ export default function Index() {
             openBalance={transactions[0]?.amount ?? 0}
             transactions={transactions}
             sid={sid}
+            role={role}
           />
           <div className="flex flex-col md:flex-row items-center justify-center m-4">
             {!infographics && (

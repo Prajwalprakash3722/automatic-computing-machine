@@ -43,6 +43,10 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
     signedOff: "",
     society: "",
     assets: [],
+    LastStatus: false,
+    level: 1,
+    ApprovedComments: [],
+    RejectedComments: [],
   });
 
   React.useEffect(() => {
@@ -54,15 +58,25 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
           }
         : data
     );
+    setData(sid ? data : { ...data, level: 3 });
   }, [sid]);
-
-  const pushData = (url: string) => {
+  /**
+   *
+   * @param url
+   * @param type
+   * @description queues the files to be uploaded to firebase storage
+   */
+  const pushData = (url: string, type: string) => {
     setData({
       ...data,
-      assets: [...data.assets, url],
+      assets: [...data.assets, { url, type }],
     });
   };
-
+  /**
+   *
+   * @param index
+   * @description dequeues the files to be uploaded to firebase storage
+   */
   const handleDelete = (index: number) => {
     setData({
       ...data,
@@ -74,17 +88,18 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
   const [file, setFile] = useState<File | null>(
     new File([], "", { type: "application/pdf" })
   );
-  const createUpload = async () => {
+
+  const createUpload = async (type: string) => {
     if (data.event !== "" && data.society !== "") {
       const imageRef = await ref(
         storage,
-        `${parseSociety(sid as number)}/${data.event}/${file!.name}`
+        `${data.society}/${data.event}/${type}/${file!.name}`
       );
       await uploadBytes(imageRef, file!)
         .then(() => {
           getDownloadURL(imageRef)
             .then((url) => {
-              pushData(url);
+              pushData(url, type);
               setUploaded(true);
             })
             .catch((error) => {
@@ -100,11 +115,11 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
     }
   };
 
-  const handleUpload = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleUpload = (e: MouseEvent<HTMLButtonElement>, type: string) => {
     e.preventDefault();
     try {
       toast.promise(
-        createUpload(),
+        createUpload(type),
         {
           loading: "Working on it...",
           success: "File Uploaded successfully!",
@@ -273,49 +288,90 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
               </div>
             </>
           )}
-          <label htmlFor="file" className="font-bold p-4">
-            Upload your reports here
-          </label>
-          <div className="flex flex-row">
-            <input
-              className="focus:outline-none w-full h-12 px-4 m-2 text-lg text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-              type="file"
-              onChange={(e) => {
-                if (
-                  e.target.files![0].type === "application/pdf"
-                  // || e.target.files![0].type === ""
-                ) {
-                  setFile(e.target.files![0] as File);
-                } else {
-                  toast.error("Please upload a valid file");
-                }
-              }}
-              placeholder="Event Reports"
-              required
-            />
-            <button
-              onClick={(e) => {
-                handleUpload(e);
-              }}
-              className="p-2 m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer"
+          <div className="flex flex-col">
+            <label
+              htmlFor="file"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              Upload Files
-            </button>
+              Upload your reports here
+            </label>
+            <div className="flex flex-row">
+              <input
+                className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                aria-describedby="file"
+                id="file"
+                type="file"
+                onChange={(e) => {
+                  if (
+                    e.target.files![0].type === "application/pdf"
+                    // || e.target.files![0].type === ""
+                  ) {
+                    setFile(e.target.files![0] as File);
+                  } else {
+                    toast.error("Please upload a valid file");
+                  }
+                }}
+                placeholder="Event Reports"
+                required
+              />
+              <button
+                onClick={(e) => {
+                  handleUpload(e, "report");
+                }}
+                className="p-2 m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer"
+              >
+                Upload Files
+              </button>
+            </div>
+            <label
+              htmlFor="file"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Upload your Bills here
+            </label>
+            <div className="flex flex-row">
+              <input
+                className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                aria-describedby="file"
+                id="file"
+                type="file"
+                onChange={(e) => {
+                  if (
+                    e.target.files![0].type === "application/pdf"
+                    // || e.target.files![0].type === ""
+                  ) {
+                    setFile(e.target.files![0] as File);
+                  } else {
+                    toast.error("Please upload a valid file");
+                  }
+                }}
+                placeholder="Event Reports"
+                required
+              />
+              <button
+                onClick={(e) => {
+                  handleUpload(e, "bills");
+                }}
+                className="p-2 m-2 hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-sm font-medium pl-2 pr-3 py-2 shadow-sm cursor-pointer"
+              >
+                Upload Bills
+              </button>
+            </div>
           </div>
           <div className="flex flex-col items-center">
             <div className="w-fit bg-slate-200 p-4 rounded-lg justify-around gap-2">
               <h1 className="text-center m-2">
-                Total Reports Uploaded : {data.assets.length}
+                Total Files Uploaded : {data.assets.length}
               </h1>
-              {data.assets.map((a, index) => (
+              {data.assets.map((a: any, index) => (
                 <div
                   key={index}
                   className=" flex flex-row items-center justify-around mb-2"
                 >
                   <div className="gap-4 font-bold text-lg text-white text-center flex flex-row justify-between">
-                    <a href={a.link} target="blank">
+                    <a href={a.url} target="blank">
                       <div className="p-2 w-full justify-center border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-800 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Report-{index + 1}
+                        File-{index + 1}
                       </div>
                     </a>
                     <span className="flex p-2 items-center justify-center border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-red-800 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
@@ -331,6 +387,23 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
               ))}
             </div>
           </div>
+          <textarea
+            placeholder="Remarks...."
+            className="focus:outline-none w-full h-16 px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
+            onChange={(e) =>
+              setData({
+                ...data,
+                ApprovedComments: [
+                  ...data.ApprovedComments,
+                  {
+                    comment: e.target.value,
+                    by: localStorage.getItem("role") as string,
+                  },
+                ],
+              })
+            }
+            required
+          />
           <button
             type="submit"
             className={`p-2 m-2 hover:bg-blue-400 group flex items-center rounded-md ${
