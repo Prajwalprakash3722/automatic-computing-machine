@@ -5,6 +5,7 @@ import { API_URL } from "../Misc/api";
 import { Toaster, toast } from "react-hot-toast";
 import { User } from "../types";
 import Link from "next/link";
+import Head from "next/head";
 const Login = () => {
   const [user, setUser] = useState<User>({
     ieeeid: "",
@@ -28,8 +29,8 @@ const Login = () => {
         });
         localStorage.setItem("token", res.data.atoken);
         localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("sid", "1");
-        localStorage.setItem("role", "3");
+        localStorage.setItem("sid", "2");
+        localStorage.setItem("role", "2");
         setTimeout(() => {
           window.location.replace(window.location.origin);
         }, 3000);
@@ -50,6 +51,11 @@ const Login = () => {
 
   return (
     <>
+      <Head>
+        <title>Accounts | Login</title>
+        <meta name="description" content="accounts maintaining for ieee rvce" />
+        <link rel="icon" href="/icons/android-chrome-512x512.png" />
+      </Head>
       {!token ? (
         <>
           <Toaster position="top-center" reverseOrder={false} />

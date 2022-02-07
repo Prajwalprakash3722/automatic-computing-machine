@@ -35,6 +35,12 @@ export default function Index() {
     },
   ];
 
+  const isEditable = (role: number) => {
+    if (role === 2 || role === 4) {
+      return false;
+    } else return true;
+  };
+
   const [transactions, setTransactions] = useState<Transaction[]>(transaction);
   const [modal, setModalOpen] = useState(false);
   const [infographics, setInfographics] = useState(false);
@@ -64,6 +70,8 @@ export default function Index() {
         console.log(err);
       });
   }, [sid, token]);
+
+  // transactions.filter((transaction) => transaction.level >= role!)
   return (
     <div>
       <Head>
@@ -76,16 +84,20 @@ export default function Index() {
         <>
           <BalCard
             openBalance={transactions[0]?.amount ?? 0}
-            transactions={transactions}
+            transactions={transactions.filter(
+              (transaction) => transaction.level >= role!
+            )}
             sid={sid}
             role={role}
           />
           <div className="flex flex-col md:flex-row items-center justify-center m-4">
-            {!infographics && (
+            {!infographics && isEditable(role!) && (
               <AddModal
                 modal={modal}
                 setModalOpen={setModalOpen}
-                transactions={transactions}
+                transactions={transactions.filter(
+                  (transaction) => transaction.level >= role!
+                )}
                 setTransactions={setTransactions}
                 sid={sid}
               />
@@ -94,12 +106,19 @@ export default function Index() {
               <InfoGraphics
                 modal={infographics}
                 setModalOpen={setInfographics}
-                transactions={transactions}
+                transactions={transactions.filter(
+                  (transaction) => transaction.level >= role!
+                )}
                 sid={sid}
               />
             )}
           </div>
-          <BalanceList transactions={transactions} sid={sid} />
+          <BalanceList
+            transactions={transactions.filter(
+              (transaction) => transaction.level >= role!
+            )}
+            sid={sid}
+          />
         </>
       ) : (
         <>

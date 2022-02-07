@@ -13,20 +13,31 @@ export default authenticated(async function handler(req: ApiRequest, res: NextAp
   try {
     const id = req.body.id;
     const role = req.body.role as number;
-
+    const comment = req.body.comment;
     const transactions = await Prisma.transaction.findUnique({
       where: {
         id: id,
       }
     })
-    if (transactions!.level < role) {
+    if (transactions!.level <= role) {
       await Prisma.transaction.update({
         where: {
           id: id,
         },
         data: {
           level: transactions!.level - 1,
-          LastStatus: !transactions!.LastStatus,
+          LastStatus: false,
+        }
+      })
+      await Prisma.rejectedComments.create({
+        data: {
+          by: JSON.stringify(role),
+          comment: comment,
+          transaction: {
+            connect: {
+              id: id,
+            }
+          }
         }
       })
       res.status(200).json({ message: 'Transaction approved' })

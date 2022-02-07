@@ -13,7 +13,7 @@ export default authenticated(async function handler(req: ApiRequest, res: NextAp
   try {
     const id = req.body.id;
     const role = req.body.role as number;
-
+    const comment = req.body.comment;
     const transactions = await Prisma.transaction.findUnique({
       where: {
         id: id,
@@ -26,6 +26,18 @@ export default authenticated(async function handler(req: ApiRequest, res: NextAp
         },
         data: {
           level: transactions!.level + 1,
+          LastStatus: true,
+        },
+      })
+      await Prisma.approvedComments.create({
+        data: {
+          by: JSON.stringify(role),
+          comment: comment,
+          transaction: {
+            connect: {
+              id: id,
+            }
+          }
         }
       })
       res.status(200).json({ message: 'Transaction approved' })

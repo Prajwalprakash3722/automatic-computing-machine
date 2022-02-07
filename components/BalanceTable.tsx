@@ -121,7 +121,7 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
           {headerGroups.map((headerGroup, index) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
-              key={index + Math.random() * 100}
+              key={index + Math.random() * 1000000}
             >
               {headerGroup.headers.map((column) => (
                 <th
@@ -151,63 +151,60 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
             prepareRow(row);
             return (
               <>
-                <Link
-                  href={`/transaction/${row.original.id as string}`}
-                  passHref={true}
+                <tr
+                  {...row.getRowProps()}
+                  key={row.original.id}
+                  className="transform transition duration-200 hover:bg-gray-600 cursor-pointer"
                 >
-                  <tr
-                    {...row.getRowProps()}
-                    key={row.original.id}
-                    className="transform transition duration-200 hover:bg-gray-600 cursor-pointer"
-                  >
-                    {row.cells.map((cell) => {
-                      return (
-                        <td
-                          className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white"
-                          {...cell.getCellProps()}
-                          key={i}
-                        >
-                          {cell.render("Cell")}
-                        </td>
-                      );
-                    })}
-                    <td className="px-16 py-4 whitespace-nowrap text-sm font-medium text-white">
-                      <span
-                        className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${TransactionType(
-                          row.original.type
-                        )}`}
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white"
+                        {...cell.getCellProps()}
+                        key={cell.column.id}
                       >
-                        {row.original.type}
-                      </span>
-                    </td>
-                    {isEditable() && (
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                        {row.original.type !== "open" && (
-                          <>
-                            <div className="flex items-start justify-between">
-                              <Link
-                                href="/edit/[id]"
-                                as={`/edit/${row.original.id}`}
-                              >
-                                <a className="m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
-                                  <PencilIcon className="h-6 w-6" />
-                                </a>
-                              </Link>
-                              <Link
-                                href="/edit/[id]"
-                                as={`/delete/${row.original.id}`}
-                              >
-                                <a className="m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
-                                  <TrashIcon className="h-6 w-6" />
-                                </a>
-                              </Link>
-                            </div>
-                          </>
-                        )}
+                        {cell.render("Cell")}
                       </td>
-                    )}
-                  </tr>
-                </Link>
+                    );
+                  })}
+                  <td className="px-16 py-4 whitespace-nowrap text-sm font-medium text-white">
+                    <span
+                      className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${TransactionType(
+                        row.original.type
+                      )}`}
+                    >
+                      {row.original.type}
+                    </span>
+                  </td>
+                  {isEditable() && (
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                      {row.original.type !== "open" && (
+                        <>
+                          <div className="flex items-start justify-between">
+                            <Link
+                              href="/edit/[id]"
+                              as={`/edit/${row.original.id}`}
+                            >
+                              <a className="tooltip m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                <span className="tooltiptext">Edit</span>
+                                <PencilIcon className="h-6 w-6" />
+                              </a>
+                            </Link>
+                            <Link
+                              href="/edit/[id]"
+                              as={`/delete/${row.original.id}`}
+                            >
+                              <a className="tooltip m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                <span className="tooltiptext">Delete</span>
+                                <TrashIcon className="h-6 w-6" />
+                              </a>
+                            </Link>
+                          </div>
+                        </>
+                      )}
+                    </td>
+                  )}
+                </tr>
               </>
             );
           })}
@@ -232,21 +229,3 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
 };
 
 export default BalCard;
-
-// TODO Below extra things are to be added
-// ! The amount has not been parsed in the table.
-/*
- {parseRupees(amount)}
- 
- */
-
-// ! This is the background color classifier for the table add this in type column
-{
-  /* <span
-  className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${TransactionType(
-    item.type
-  )}`}
->
-  {item.type}
-</span>; */
-}

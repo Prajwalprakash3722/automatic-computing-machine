@@ -36,10 +36,15 @@ export default authenticated(async function handler(req: ApiRequest, res: NextAp
               url: true,
               type: true,
             }
-          }
+          },
+          RejectedComments: {
+            select: {
+              comment: true,
+              by: true,
+            }
+          },
         },
       });
-      console.log(transactions);
       res.status(200).json(transactions)
     }
     else if (soc === 'Main') {
@@ -51,9 +56,16 @@ export default authenticated(async function handler(req: ApiRequest, res: NextAp
           }
         },
         include: {
+          RejectedComments: {
+            select: {
+              comment: true,
+              by: true,
+            }
+          },
           assets: {
             select: {
               url: true,
+              type: true,
             }
           },
           ApprovedComments: {
@@ -61,12 +73,10 @@ export default authenticated(async function handler(req: ApiRequest, res: NextAp
               comment: true,
               by: true,
             }
-          }
+          },
         }
       });
       res.status(200).json(transactions)
-      console.log(transactions);
-
     }
   }
   catch (err) {

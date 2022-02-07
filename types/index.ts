@@ -11,7 +11,7 @@ export type Transaction = {
   LastStatus: boolean;
   level: number;
   ApprovedComments: ApprovedComments[];
-  RejectedComments: string[];
+  RejectedComments: ApprovedComments[];
 };
 
 export type User = {

@@ -33,7 +33,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
     "Sight",
     "WIE",
   ];
-
+  const [com, setCom] = useState<string>("");
   const [data, setData] = useState<Transaction>({
     event: "",
     date: "",
@@ -41,25 +41,15 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
     type: "debit",
     description: "",
     signedOff: "",
-    society: "",
+    society: sid === 1 ? "" : (parseSociety(sid!) as string),
     assets: [],
     LastStatus: false,
-    level: 1,
-    ApprovedComments: [],
+    level: sid === 1 ? 3 : 1,
+    ApprovedComments: [
+      { comment: com, by: localStorage.getItem("role") as string },
+    ],
     RejectedComments: [],
   });
-
-  React.useEffect(() => {
-    setData(
-      sid
-        ? {
-            ...data,
-            society: parseSociety(sid as number) as string,
-          }
-        : data
-    );
-    setData(sid ? data : { ...data, level: 3 });
-  }, [sid]);
   /**
    *
    * @param url
@@ -72,6 +62,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
       assets: [...data.assets, { url, type }],
     });
   };
+
   /**
    *
    * @param index
@@ -90,6 +81,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
   );
 
   const createUpload = async (type: string) => {
+    console.log(data, "data");
     if (data.event !== "" && data.society !== "") {
       const imageRef = await ref(
         storage,
@@ -114,7 +106,12 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
       toast.error("Please fill in all the fields");
     }
   };
-
+  /**
+   *
+   * @param e
+   * @param type
+   * @description handles the File upload request and toaster notifications
+   */
   const handleUpload = (e: MouseEvent<HTMLButtonElement>, type: string) => {
     e.preventDefault();
     try {
@@ -264,7 +261,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
                 required
               >
                 {soc.map((s, index) => (
-                  <option value={s} key={index}>
+                  <option value={s} key={JSON.stringify(s)}>
                     {s}
                   </option>
                 ))}
@@ -291,7 +288,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
           <div className="flex flex-col">
             <label
               htmlFor="file"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Upload your reports here
             </label>
@@ -325,7 +322,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
             </div>
             <label
               htmlFor="file"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Upload your Bills here
             </label>
@@ -365,7 +362,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
               </h1>
               {data.assets.map((a: any, index) => (
                 <div
-                  key={index}
+                  key={JSON.stringify(a)}
                   className=" flex flex-row items-center justify-around mb-2"
                 >
                   <div className="gap-4 font-bold text-lg text-white text-center flex flex-row justify-between">
@@ -390,18 +387,7 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
           <textarea
             placeholder="Remarks...."
             className="focus:outline-none w-full h-16 px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg focus:shadow-outline"
-            onChange={(e) =>
-              setData({
-                ...data,
-                ApprovedComments: [
-                  ...data.ApprovedComments,
-                  {
-                    comment: e.target.value,
-                    by: localStorage.getItem("role") as string,
-                  },
-                ],
-              })
-            }
+            onChange={(e) => setCom(e.target.value)}
             required
           />
           <button

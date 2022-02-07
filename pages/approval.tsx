@@ -1,8 +1,11 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 import axios from "axios";
+import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import ApproveModal from "../components/Modals/ApproveModal";
+import RejectModal from "../components/Modals/RejectModal";
 import { parseRole, parseSociety } from "../Misc/parseSociety";
 import { Transaction } from "../types";
 
@@ -27,6 +30,23 @@ const Approval = () => {
     },
   ];
 
+  const Reject = async (comment: string) => {
+    const data = {
+      id: transactionId,
+      role: role,
+      comment: comment,
+    };
+    try {
+      await axios.post("/api/transaction/reject", data, {
+        headers: {
+          Authorization: token as string,
+        },
+      });
+    } catch (err) {
+      throw new Error(err as any);
+    }
+  };
+
   const TransactionType = (type: string) => {
     switch (type) {
       case "credit":
@@ -41,6 +61,9 @@ const Approval = () => {
   const [token, setToken] = useState<string | null>(null);
   const [sid, setSid] = useState<number | null>(null);
   const [role, setRole] = useState<number | null>(null);
+  const [aModal, setAModal] = useState<boolean>(false);
+  const [rModal, setRModal] = useState<boolean>(false);
+  const [transactionId, setTransactionId] = useState<string | null>(null);
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     setSid(parseInt(localStorage.getItem("sid") as string));
@@ -64,10 +87,11 @@ const Approval = () => {
       });
   }, [role, sid, token]);
 
-  const Approve = async (id: string) => {
+  const Approve = async (comment: string) => {
     const data = {
-      id: id,
+      id: transactionId,
       role: role,
+      comment: comment,
     };
     try {
       await axios.post("/api/transaction/approve", data, {
@@ -80,10 +104,10 @@ const Approval = () => {
     }
   };
 
-  const handleSubmit = async (id: string) => {
+  const handleSubmit = async (comment: string) => {
     try {
       toast.promise(
-        Approve(id),
+        Approve(comment),
         {
           loading: "Working on it...",
           success: "Transaction Approved successfully!",
@@ -93,7 +117,28 @@ const Approval = () => {
           duration: 3000,
         }
       );
-      // window.reload();
+      setAModal(false);
+      setRModal(false);
+    } catch (error) {
+      toast.error(error as any);
+    }
+  };
+
+  const handleReject = async (comment: string) => {
+    try {
+      toast.promise(
+        Reject(comment),
+        {
+          loading: "Working on it...",
+          success: "Transaction Rejected successfully!",
+          error: "You are not authorized to Reject this transaction",
+        },
+        {
+          duration: 3000,
+        }
+      );
+      setAModal(false);
+      setRModal(false);
     } catch (error) {
       toast.error(error as any);
     }
@@ -108,7 +153,8 @@ const Approval = () => {
     "society",
     "type",
     "remarks",
-    "Assets",
+    "Reports",
+    "Bills",
     "Remarks History",
     "Latest Status",
     "actions",
@@ -116,6 +162,11 @@ const Approval = () => {
 
   return (
     <>
+      <Head>
+        <title>Accounts | Pending</title>
+        <meta name="description" content="accounts maintaining for ieee rvce" />
+        <link rel="icon" href="/icons/android-chrome-512x512.png" />
+      </Head>
       <Toaster />
       <div>
         <div className="border-2 border-blue-400 w-full max-w-lg mx-auto overflow-hidden bg-white rounded-lg shadow-lg ">
@@ -126,6 +177,28 @@ const Approval = () => {
           </div>
         </div>
         <section className="flex flex-col mt-4">
+          {aModal && (
+            <>
+              <div className="flex flex-row justify-center items-center my-8 transition ease-in-out delay-200 duration-300">
+                <ApproveModal
+                  aModal={aModal}
+                  setAModal={setAModal}
+                  handleSubmit={handleSubmit}
+                />
+              </div>
+            </>
+          )}
+          {rModal && (
+            <>
+              <div className="flex flex-row justify-center items-center my-8 transition ease-in-out delay-200 duration-300">
+                <RejectModal
+                  rModal={rModal}
+                  setRModal={setRModal}
+                  handleSubmit={handleReject}
+                />
+              </div>
+            </>
+          )}
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-800 rounded-lg">
@@ -180,26 +253,47 @@ const Approval = () => {
                             {transaction.description}
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-white">
-                            <a
-                              href={transaction.id}
-                              className="text-blue-400 hover:text-blue-500 hover:underline"
-                            >
-                              {transaction.assets &&
-                              transaction.assets.length > 0
-                                ? `${transaction.assets.length} Assets`
-                                : "0 Assets"}
-                            </a>
+                            {transaction.assets &&
+                              transaction.assets
+                                .filter((asset) => asset.type === "report")
+                                .map((asset, index) => (
+                                  <>
+                                    <a
+                                      href={asset.url}
+                                      target="blank"
+                                      className="text-blue-400 hover:text-blue-500 hover:underline"
+                                    >
+                                      Report-{index + 1}
+                                    </a>
+                                  </>
+                                ))}
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-white">
-                            {transaction.ApprovedComments.length > 0 && (
-                              <>
-                                {transaction.ApprovedComments.map(
+                            {transaction.assets &&
+                              transaction.assets
+                                .filter((asset) => asset.type === "bills")
+                                .map((asset, index) => (
+                                  <>
+                                    <a
+                                      href={asset.url}
+                                      target="blank"
+                                      className="text-blue-400 hover:text-blue-500 hover:underline"
+                                    >
+                                      Bill-{index + 1}
+                                    </a>
+                                  </>
+                                ))}
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-white">
+                            {transaction.ApprovedComments.length > 0 &&
+                              transaction.LastStatus && (
+                                <>
+                                  {/* {transaction.ApprovedComments.map(
                                   (comment: any) => {
-                                    console.log(comment);
                                     return (
                                       <>
                                         <span key={JSON.stringify(comment)}>
-                                          remarks by{" "}
+                                          Approved Comments by{" "}
                                           {parseRole(
                                             parseInt(comment.by) as number
                                           )}
@@ -210,14 +304,83 @@ const Approval = () => {
                                       </>
                                     );
                                   }
-                                )}
-                              </>
-                            )}
+                                )} */}
+                                  <span
+                                    key={JSON.stringify(
+                                      transaction.ApprovedComments
+                                    )}
+                                  >
+                                    Approved Comments by{" "}
+                                    {parseRole(
+                                      parseInt(
+                                        transaction.ApprovedComments[
+                                          transaction.ApprovedComments.length -
+                                            1
+                                        ].by
+                                      ) as number
+                                    )}
+                                    {": "}
+                                    {
+                                      transaction.ApprovedComments[
+                                        transaction.ApprovedComments.length - 1
+                                      ].comment
+                                    }
+                                    <br />
+                                  </span>
+                                </>
+                              )}
+                            {transaction.RejectedComments &&
+                              !transaction.LastStatus &&
+                              transaction.RejectedComments.length > 0 && (
+                                <>
+                                  {/* {transaction.RejectedComments.map(
+                                    (comment: any) => {
+                                      return (
+                                        <>
+                                          <span key={JSON.stringify(comment)}>
+                                            Rejected Comments by{" "}
+                                            {parseRole(
+                                              parseInt(comment.by) as number
+                                            )}
+                                            {": "}
+                                            {comment.comment}
+                                            <br />
+                                          </span>
+                                        </>
+                                      );
+                                    }
+                                  )} */}
+                                  <span
+                                    key={JSON.stringify(
+                                      transaction.RejectedComments
+                                    )}
+                                  >
+                                    Rejected Comments by{" "}
+                                    {parseRole(
+                                      parseInt(
+                                        transaction.RejectedComments[
+                                          transaction.RejectedComments.length -
+                                            1
+                                        ].by
+                                      ) as number
+                                    )}
+                                    {": "}
+                                    {
+                                      transaction.RejectedComments[
+                                        transaction.RejectedComments.length - 1
+                                      ].comment
+                                    }
+                                    <br />
+                                  </span>
+                                </>
+                              )}
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-white">
                             {transaction.LastStatus
                               ? `Approved by ${parseRole(transaction.level)}`
-                              : `Approved by ${parseRole(transaction.level)}`}
+                              : `Rejected by ${parseRole(
+                                  transaction.level + 2
+                                )}`}
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-white">
                             {transaction.type !== "open" &&
@@ -226,15 +389,28 @@ const Approval = () => {
                                   <div className="flex items-start justify-between">
                                     <button
                                       onClick={() => {
-                                        handleSubmit(transaction.id!);
+                                        setAModal(true);
+                                        setTransactionId(transaction.id!);
                                       }}
-                                      className="m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1"
+                                      className="tooltip m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1"
                                     >
+                                      <span className="tooltiptext">
+                                        Approve
+                                      </span>
                                       <CheckCircleIcon className="h-6 w-6" />
                                     </button>
-                                    <div className="m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                    <button
+                                      onClick={() => {
+                                        setRModal(true);
+                                        setTransactionId(transaction.id!);
+                                      }}
+                                      className="tooltip m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1"
+                                    >
+                                      <span className="tooltiptext">
+                                        Reject
+                                      </span>
                                       <XCircleIcon className="h-6 w-6" />
-                                    </div>
+                                    </button>
                                   </div>
                                 </>
                               )}

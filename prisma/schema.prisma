@@ -16,7 +16,7 @@ model Transaction {
   date             String
   amount           Float
   type             String
-  level            Int                @default(1)
+  level            Int
   LastStatus       Boolean            @default(true)
   description      String
   signedOff        String
