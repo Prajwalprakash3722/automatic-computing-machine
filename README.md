@@ -4,11 +4,13 @@
 
 ## Updates
 
+- Some changes are to be yet implemented in `site-rear` for role handling and token handling.
+
+- Should Yet build a UI for easing my life when i have to add users such as treasurers, counsellors, etc....
+
 - As of Now Everything is complete except the `sid` pulling from `site-rear` api [#31](https://github.com/IEEE-RVCE/site-rear/pull/31), if this PR is merged then the `sid` will be pulled from `site-rear` api and stored in the localstorage.
 
 - Paging and Filtering must be done [@chrisvrose](https://github.com/chrisvrose)
-
-- see **Very High Priority** section for Some Improvements that must be done in future.
 
 #### As of now we have following features:
 
@@ -20,25 +22,25 @@
 - Graphical Representation of the Amount Spent on _each events_ for **society level** access
 - Generating the PDF Report of the Transactions
 - Generating the CSV Report of the Transactions
-- Society can add their own transactions, ofc they won't have access to the main Accounts
+- pdf/docs/image uploading
+- separate the pdf uploading into reports and bill section
+
 - 2 Level of Authentication
+
   - Society Level
   - Main Execom Level
+  - Branch and Society Counsellor Level
+
+- **Roles**
+- Society Treasurers can add their own transactions,(no access to the main Accounts)
+- Society Counsellor can approve or reject the transactions added by society treasurers,(no access to the main Accounts)
+- Main Treasurers can add their own transactions or approve the transactions which are already approved by society counsellors ,(full access to the main Accounts)
+- Branch Counsellor can approve or reject the transactions approved by Main treasurer,(full access to the main Accounts)
+- Branch counsellors and Main treasurer (signed of by)
 
 #### To be Done
 
-- Add one more level of Authentication
-
-  - Main Execom Level
-  - Society Level
-  - **Branch Counsellor Level**
-
-- Branch Counsellors cannot add or modify the transactions of the societies, they can only approve or reject the requests of the societies.
-- PDF Uploading facility for uploading bills and financial reports
-
-#### Very High Priority
-
-- Pass the decoded token to the next function ,refer [api/transaction/add](https://github.com/IEEE-RVCE/Accounts/blob/17ea7b2c0fb3bccb6eff09ea7a564b910e13bdfa/pages/api/transaction/add.ts#L10) As of now we are storing the sid in local storage, this is just a workaround some day it might be taken as advantage, so the search for `how to pass decoded token` goes on....
+- Nan
 
 #### Low Priority:
 
@@ -49,7 +51,3 @@
 #### Critical Section
 
 - As of now we are hardcoding the opening balance, if anyone has a better idea please feel free to suggest.
-
-* Branch counsellors and Main treasurer (signned of by)
-* feauture for pdf uploading
-* separate the pdf uploading into reports and bill section
