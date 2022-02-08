@@ -1,4 +1,5 @@
 # Accounts
+![README drawio](https://user-images.githubusercontent.com/71436720/152999124-11b02319-4529-4d5b-a248-02e5ff1a4124.png)
 
 ### This is a Account Maintaining System for IEEE RVCE SB.
 
@@ -69,3 +70,5 @@ Society Treasurer-->Society Counsellor-->Main Treasurer-->Branch Counsellor-->Ac
 #### Critical Section
 
 - As of now we are hardcoding the opening balance, if anyone has a better idea please feel free to suggest.
+
+![methodlogy](https://user-images.githubusercontent.com/71436720/152999149-ed390e8a-6258-4122-9a67-85900ce0d8b1.png)
