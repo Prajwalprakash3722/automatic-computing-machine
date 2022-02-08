@@ -53,12 +53,12 @@
   - If rejected by branch counsellor, the transaction will go back to main treasurer for corrections. `level 2`
   - After correction, the transaction can be approved by branch treasurer.
 
-ST-->SC-->MT-->BC-->A
+ST-->SC-->MT-->BC-->A<br/>
 Society Treasurer-->Society Counsellor-->Main Treasurer-->Branch Counsellor-->Accounts
 
 #### To be Done
 
-- Nan
+- Send a Email whenever a transaction is rejected
 
 #### Low Priority:
 

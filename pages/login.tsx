@@ -30,7 +30,7 @@ const Login = () => {
         localStorage.setItem("token", res.data.atoken);
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("sid", "2");
-        localStorage.setItem("role", "2");
+        localStorage.setItem("role", "1");
         setTimeout(() => {
           window.location.replace(window.location.origin);
         }, 3000);

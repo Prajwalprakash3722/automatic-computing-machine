@@ -9,12 +9,12 @@ import { getTransactionRows, tableHeader } from './DataFormatting';
  * Generate a PDF
  * @param transactions
  */
-const generatePDF = (transactions: Transaction[], sid: number | null) => {
+const generatePDF = (transactions: Transaction[]) => {
 
   const doc = new jsPDF();
 
   const tableColumn = tableHeader;
-  const tableRows = getTransactionRows(transactions, sid);
+  const tableRows = getTransactionRows(transactions);
 
   autoTable(doc, {
     head: [tableColumn],

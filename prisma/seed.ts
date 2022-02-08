@@ -13,6 +13,8 @@ async function main() {
       description: "Opening Balance for 2022",
       signedOff: "Shashank Dhavala",
       society: "Main",
+      level: 5,
+      LastStatus: true,
     },
   });
 }

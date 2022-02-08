@@ -43,19 +43,7 @@ export default function Edit({ transaction }: Props) {
       throw new Error(error as any);
     }
   };
-  const pushData = (url: string) => {
-    setData({
-      ...data,
-      assets: [...data.assets, url],
-    });
-  };
 
-  const handleDelete = (index: number) => {
-    setData({
-      ...data,
-      assets: data.assets.filter((_, i) => i !== index),
-    });
-  };
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement>,
     data: Transaction

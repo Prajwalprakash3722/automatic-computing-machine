@@ -1,4 +1,12 @@
+version: '3'
 services:
+
+  # app:
+  #   container_name: account_web
+  #   image: prajwalprakash3722/account:lastest
+  #   ports:
+  #     - "3001:3000"
+
   pgdb:
     container_name: accounts_database
     image: postgres:13
