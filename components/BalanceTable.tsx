@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnFilter } from "../Misc/ColFilter";
 import { Transaction } from "../types";
 import { useTable, usePagination, useFilters } from "react-table";
 import { PencilIcon } from "@heroicons/react/solid";
 import { TrashIcon } from "@heroicons/react/solid";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 type BalanceCardProps = {
   transaction: Transaction[];
 };
@@ -25,6 +27,23 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
         return "bg-yellow-300 text-yellow-800";
       case "debit":
         return "bg-red-400 text-red-800";
+    }
+  };
+
+  const [level, setLevel] = useState<number>(0);
+
+  useMemo(() => setLevel(parseInt(localStorage.getItem("role") as string)), []);
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`/api/transaction/delete/${id}`, {
+        headers: {
+          authorization: `${localStorage.getItem("token")}`,
+        },
+      });
+      toast.success("Transaction Deleted");
+    } catch (e) {
+      console.log(e);
+      toast.error("Something went wrong");
     }
   };
 
@@ -178,30 +197,33 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
                   </td>
                   {isEditable() && (
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                      {row.original.type !== "open" && (
-                        <>
-                          <div className="flex items-start justify-between">
-                            <Link
-                              href="/edit/[id]"
-                              as={`/edit/${row.original.id}`}
-                            >
-                              <a className="tooltip m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
-                                <span className="tooltiptext">Edit</span>
-                                <PencilIcon className="h-6 w-6" />
-                              </a>
-                            </Link>
-                            <Link
-                              href="/edit/[id]"
-                              as={`/delete/${row.original.id}`}
-                            >
-                              <a className="tooltip m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                      {row.original.type !== "open" &&
+                        row.original.level <= 4 &&
+                        row.original!.level <= level && (
+                          <>
+                            <div className="flex items-start justify-between">
+                              <Link
+                                href="/edit/[id]"
+                                as={`/edit/${row.original.id}`}
+                              >
+                                <a className="tooltip m-2 text-green-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1">
+                                  <span className="tooltiptext">Edit</span>
+                                  <PencilIcon className="h-6 w-6" />
+                                </a>
+                              </Link>
+
+                              <div
+                                onClick={() => {
+                                  handleDelete(row.original.id!);
+                                }}
+                                className="tooltip m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1"
+                              >
                                 <span className="tooltiptext">Delete</span>
                                 <TrashIcon className="h-6 w-6" />
-                              </a>
-                            </Link>
-                          </div>
-                        </>
-                      )}
+                              </div>
+                            </div>
+                          </>
+                        )}
                     </td>
                   )}
                 </tr>
@@ -215,6 +237,7 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
 
   return (
     <>
+      <Toaster position="top-center" reverseOrder={false} />
       <section className="flex flex-col  ">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

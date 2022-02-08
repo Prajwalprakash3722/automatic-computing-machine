@@ -399,18 +399,20 @@ const Approval = () => {
                                       </span>
                                       <CheckCircleIcon className="h-6 w-6" />
                                     </button>
-                                    <button
-                                      onClick={() => {
-                                        setRModal(true);
-                                        setTransactionId(transaction.id!);
-                                      }}
-                                      className="tooltip m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1"
-                                    >
-                                      <span className="tooltiptext">
-                                        Reject
-                                      </span>
-                                      <XCircleIcon className="h-6 w-6" />
-                                    </button>
+                                    {transaction.level !== 0 && (
+                                      <button
+                                        onClick={() => {
+                                          setRModal(true);
+                                          setTransactionId(transaction.id!);
+                                        }}
+                                        className="tooltip m-2 text-red-500 md:m-0 hover:underline bg-slate-50 rounded-md p-1"
+                                      >
+                                        <span className="tooltiptext">
+                                          Reject
+                                        </span>
+                                        <XCircleIcon className="h-6 w-6" />
+                                      </button>
+                                    )}
                                   </div>
                                 </>
                               )}

@@ -18,7 +18,7 @@ export const authenticated = (fn: NextApiHandler) => async (
   verify(atoken!, process.env.ACCESS_TOKEN_SECRET as string, async function (err, decoded) {
     if (!err && decoded) {
 
-      req.user = decoded;
+      req.user = decoded
       return await fn(req, res);
     }
     else if (err) {
