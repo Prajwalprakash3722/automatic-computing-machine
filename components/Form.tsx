@@ -53,8 +53,8 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
   });
   /**
    *
-   * @param url
-   * @param type
+   * @param {string} url
+   * @param {string} type
    * @description queues the files to be uploaded to firebase storage
    */
   const pushData = (url: string, type: string) => {

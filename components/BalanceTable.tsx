@@ -7,6 +7,7 @@ import { PencilIcon } from "@heroicons/react/solid";
 import { TrashIcon } from "@heroicons/react/solid";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Router from "next/router";
 type BalanceCardProps = {
   transaction: Transaction[];
 };
@@ -174,6 +175,9 @@ const BalCard = ({ transaction }: BalanceCardProps) => {
                   {...row.getRowProps()}
                   key={row.original.id}
                   className="transform transition duration-200 hover:bg-gray-600 cursor-pointer"
+                  onDoubleClick={() => {
+                    Router.push(`/transaction/${row.original.id}`);
+                  }}
                 >
                   {row.cells.map((cell) => {
                     return (

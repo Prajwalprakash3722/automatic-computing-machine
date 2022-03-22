@@ -11,7 +11,7 @@ export type Transaction = {
   LastStatus: boolean;
   level: number;
   ApprovedComments: ApprovedComments[];
-  RejectedComments: ApprovedComments[];
+  RejectedComments: RejectedComments[];
 };
 
 export type User = {
@@ -20,6 +20,11 @@ export type User = {
 }
 
 interface ApprovedComments {
+  comment: string;
+  by: string;
+}
+
+interface RejectedComments {
   comment: string;
   by: string;
 }

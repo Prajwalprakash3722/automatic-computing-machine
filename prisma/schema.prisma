@@ -26,6 +26,7 @@ model Transaction {
   assets           Asset[]
   ApprovedComments ApprovedComments[]
   RejectedComments RejectedComments[]
+  Comments         Comment[]
 }
 
 // Assets Schema related to Transaction based on transaction id
@@ -34,7 +35,7 @@ model Asset {
   transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   transactionId String
   url           String
-  type          String // either a report or bills 
+  type          AssetType
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -49,6 +50,27 @@ enum Type {
   open
   debit
   credit
+}
+
+enum AssetType {
+  REPORT
+  BILLS
+}
+
+enum CommentType {
+  APPROVED
+  REJECTED
+}
+
+model Comment {
+  id            String      @id @default(cuid())
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  transactionId String
+  comment       String
+  by            String
+  type          CommentType
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model ApprovedComments {
