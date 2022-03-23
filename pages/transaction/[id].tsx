@@ -3,6 +3,7 @@ import { PaperClipIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import TimeLine from "../../components/TimeLine";
 import prisma from "../../lib/prisma";
 import { parseRole, parseSociety } from "../../Misc/parseSociety";
 import type { Transaction } from "../../types";
@@ -145,12 +146,12 @@ export default function View({ transaction }: Props) {
                         Latest Status
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        {data.LastStatus ? "Rejected " : "Approved"}
+                        {!data.LastStatus ? "Rejected " : "Approved"}
                       </dd>
                     </div>
                     <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                       <dt className="text-sm font-medium text-gray-500">
-                        Last {data.LastStatus ? "Rejected" : "Approved"} By
+                        Last {!data.LastStatus ? "Rejected" : "Approved"} By
                       </dt>
                       <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         {transaction.LastStatus
@@ -161,6 +162,8 @@ export default function View({ transaction }: Props) {
                   </dl>
                 </div>
               </div>
+              <br />
+              <TimeLine transaction={data} />
             </>
           ) : (
             <>

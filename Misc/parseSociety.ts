@@ -47,7 +47,7 @@ export const parseRole = (role: number) => {
 
   switch (role) {
     case 1:
-      rol = 'Treasurer'; // Student Treasurer
+      rol = 'Student Treasurer'; // Student Treasurer
       break;
     case 2:
       rol = 'Counsellor'; // Society Counsellor
