@@ -24,6 +24,7 @@ const Login = () => {
         pwd: user.password,
       });
       if (res.data.ok === true && res.data.auth === true) {
+        console.log(res.data)
         toast.success("Login Successful", {
           duration: 2900,
         });

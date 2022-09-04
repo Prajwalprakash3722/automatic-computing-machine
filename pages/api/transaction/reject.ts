@@ -40,10 +40,10 @@ export default authenticated(async function handler(req: ApiRequest, res: NextAp
           }
         }
       })
-      res.status(200).json({ message: 'Transaction approved' })
+      res.status(200).json({ message: 'Transaction Rejected' })
     }
     else {
-      res.status(401).json({ message: 'You are not authorized to approve this transaction' });
+      res.status(401).json({ message: 'You are not authorized to reject this transaction' });
     }
     res.status(200).json(transactions)
 

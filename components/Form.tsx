@@ -139,12 +139,16 @@ const Form = ({ transactions, setTransactions, setModal, sid }: Props) => {
    */
   const create = async (data: Transaction) => {
     try {
-      await axios.post("http://localhost:3001/api/transaction/add", data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token") as string,
-        },
-      });
+      await axios.post(
+        "http://localhost:3001/api/transaction/add",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token") as string,
+          },
+        }
+      );
       setModal(false);
       setTransactions([...transactions, data]);
     } catch (error) {

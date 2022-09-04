@@ -33,12 +33,16 @@ export default function Edit({ transaction }: Props) {
 
   const create = async (data: Transaction) => {
     try {
-      await axios.post("http://localhost:3000/api/transaction/edit", data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token") as string,
-        },
-      });
+      await axios.post(
+        "http://localhost:3001/api/transaction/edit",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: localStorage.getItem("token") as string,
+          },
+        }
+      );
     } catch (error) {
       throw new Error(error as any);
     }

@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import Head from "next/head";
 import AddModal from "../components/AddModal";
 import BalanceList from "../components/TransactionsList";
@@ -6,7 +5,6 @@ import BalCard from "../components/HeaderCard";
 import { Transaction } from "../types";
 import { useEffect, useState } from "react";
 import InfoGraphics from "../components/InfoGraphics";
-import Prisma from "../lib/prisma";
 import Link from "next/link";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -14,7 +12,7 @@ import toast, { Toaster } from "react-hot-toast";
 /**
  * @note We are not having any server-side rendering here as the rendering depends on some data from client side
  */
-export default function Index() {
+export default function Index(): JSX.Element {
   const transaction = [
     {
       id: "",
@@ -57,7 +55,7 @@ export default function Index() {
       society: sid,
     };
     axios
-      .post("/api/transaction/fetch", data, {
+      .post("http://localhost:3001/api/transaction/fetch", data, {
         headers: {
           Authorization: token as string,
         },
